@@ -1,3 +1,21 @@
+/*
+ *  This file is part of Kraftstoffverbrauch3.
+ *
+ *  Kraftstoffverbrauch3 is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Kraftstoffverbrauch3 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kraftstoffverbrauch3; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package de.ewus.kv3;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -9,24 +27,7 @@ import java.net.URL;
 /**
  * Eine Implementation des UIManagers mit einer Java SWING-Oberfläche.
  *
- *  <p>This file is part of Kraftstoffverbrauch3.</p>
- *
- *  <p>Kraftstoffverbrauch3 is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.</p>
-
- *  <p>Kraftstoffverbrauch3 is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.</p>
-
- *  <p>You should have received a copy of the GNU General Public License
- *  along with Kraftstoffverbrauch3; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</p>
- *
  * @author     Erik Wegner
- * @created    1. Oktober 2004
  * @version    1.0
  */
 public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, ListSelectionListener {
@@ -45,19 +46,28 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      */
     public UIswing() { }
 
-        /** Handle the key typed event from the text field. */
+        /**
+     * Handle the key typed event from the text field.
+     * @param e Ereignis
+     */
     public void keyTyped(KeyEvent e) {
 	    System.out.println("KEY TYPED: " + e.getKeyChar());        
         // TODO: Auf Tastendrücke angemessen reagieren
         zahlentaste("");
     }
 
-    /** Handle the key pressed event from the text field. */
+    /**
+     * Handle the key pressed event from the text field.
+     * @param e Ereignis
+     */
     public void keyPressed(KeyEvent e) {
 	    //System.out.println("KEY PRESSED: " + e);
     }
 
-    /** Handle the key released event from the text field. */
+    /**
+     * Handle the key released event from the text field.
+     * @param e Ereignis
+     */
     public void keyReleased(KeyEvent e) {
         //System.out.println("KEY RELEASED: " + e);
     }
@@ -126,6 +136,10 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
     public void mouseExited(MouseEvent e) {}
     */
     
+    /**
+     * 
+     * @param e 
+     */
     public void valueChanged(ListSelectionEvent e) {
         historieEintragBearbeiten(histTable.getSelectedRow());
     }
@@ -158,9 +172,6 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         }
     }
     
-    /**
-     *  Description of the Method
-     */
     public void startUI() {
         javax.swing.SwingUtilities.invokeLater(this);        
     }

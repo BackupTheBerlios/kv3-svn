@@ -1,3 +1,21 @@
+/*
+ *  This file is part of Kraftstoffverbrauch3.
+ *
+ *  Kraftstoffverbrauch3 is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Kraftstoffverbrauch3 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kraftstoffverbrauch3; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package de.ewus.kv3; 
 
 import java.util.Vector;
@@ -5,10 +23,10 @@ import java.io.*;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Write a description of class Historie here.
- * 
- * @author Erik Wegner
- * @version 3.0
+ * Die Klasse Historie verwaltet alle historisierten Eingaben.
+ *
+ * @author     Erik Wegner
+ * @version    3.0
  */
 public class Historie extends javax.swing.table.AbstractTableModel {
     private Kleber kleber;
@@ -25,7 +43,8 @@ public class Historie extends javax.swing.table.AbstractTableModel {
 
     private Vector<Historieneintrag> historie;
     /**
-     * Constructor for objects of class Historie
+     * Erzeugt die Historien-Klasse und liest Voreinstellungen aus den Properties.
+     * @param kleber Die Kleber-Klasse zur Verbindung aller Hilfsklassen.
      */
     public Historie(Kleber kleber) {
 	historie = new Vector<Historieneintrag>();
@@ -68,6 +87,10 @@ public class Historie extends javax.swing.table.AbstractTableModel {
         //System.out.println(e);
     }
     
+    /**
+     * Die Historie wird mit Einträgen aus der Datei "datei" gefüllt.
+     * @param datei Dateiname der Eingabedatei
+     */
     public void liesHistorie(String datei) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(datei));
@@ -78,6 +101,10 @@ public class Historie extends javax.swing.table.AbstractTableModel {
         catch (IOException e) { System.err.println(e.getMessage()); }
     }
     
+    /**
+     * Die Einträge der Historie werden in die Datei "datei" geschrieben.
+     * @param datei Der Dateiname der Ausgabedatei
+     */
     public void schreibHistorie(String datei) {
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(datei));
@@ -89,16 +116,34 @@ public class Historie extends javax.swing.table.AbstractTableModel {
         } catch (IOException e) { System.err.println(e.getMessage()); }
     }
     
+    /**
+     * Gibt an, wie viele Einträge in der Historie gespeichert sind.
+     * @return Anzahl der Einträge
+     */
     public int size() { return this.historie.size();}
     
+    /**
+     * Liest aus der Historie einen Eintrag aus.
+     * @param nummer Die Nummer des gewünschten Eintrags
+     * @return Der Eintrag der Historie
+     */
     public Historieneintrag holeEintragNr(int nummer) {
         return historie.elementAt(nummer);
     }
 
+    /**
+     * Überschreibt in der Historie den Eintrag mit der Nummer "nummer" mit "e"
+     * @param nummer Position des Eintrags in der Historie
+     * @param e Der neue Eintrag, der in der Historie an Position "nummer" gespeichert werden soll
+     */
     public void setzeEintragNr(int nummer, Historieneintrag e) {
         historie.setElementAt(e, nummer);
     }
     
+    /**
+     * Entfernt den Eintrag an Position "nummer" aus der Historie
+     * @param nummer Die Position des Eintrags, der gelöscht werden soll.
+     */
     public void loescheEintrag(int nummer) {
         historie.removeElementAt(nummer);
         neueWerte();
@@ -167,6 +212,9 @@ public class Historie extends javax.swing.table.AbstractTableModel {
         return Historieneintrag.feldNamen[columnInhalt[col]];
     }
     
+    /**
+     * Informiert alle aktiven Listeners per fireData
+     */
     public void neueWerte() {
         fireTableDataChanged();
     }

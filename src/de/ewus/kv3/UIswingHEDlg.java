@@ -1,3 +1,21 @@
+/*
+ *  This file is part of Kraftstoffverbrauch3.
+ *
+ *  Kraftstoffverbrauch3 is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Kraftstoffverbrauch3 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kraftstoffverbrauch3; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package de.ewus.kv3;
 
 import javax.swing.*;
@@ -6,6 +24,12 @@ import java.awt.event.*;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
 
+/**
+ * Eine Klasse zur Darstellung des Historieneintrag-bearbeiten-Dialogs im Java Swing-Stil.
+ *
+ * @author     Erik Wegner
+ * @version    1.0
+ */
 public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
 {
     private JTextField 
@@ -18,10 +42,20 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
     private Historieneintrag e;
     private UIManager.HEDlgErgebnis ergebnis;
 
+    /**
+     * Die Methode liefert nach Ausführen des Dialogs das Dialogergebnis zurück.
+     * @return Die Benutzerauswahl zum Schließen des Dialogs.
+     */
     public UIManager.HEDlgErgebnis holeErgebnis() {
         return ergebnis;
     }
     
+	/**
+	 * Erzeugt den Dialog.
+	 * @param owner Elternfenster des Dialogs
+	 * @param modal Bestimmt, ob der Dialog modal angezeigt werden soll
+	 * @param e Der Historieneintrag, der zur Bearbeitung anzeigt werden soll
+	 */
 	public UIswingHEDlg(Frame owner, boolean modal, Historieneintrag e) {
         super(owner, "Eintrag bearbeiten", modal);
         
@@ -203,6 +237,10 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         e.setzeDatum(tfDatum.getText());
     }
     
+    /**
+     * Fängt Aktionsereignisse ab.
+     * @param av Das Aktionsereignis
+     */
     public void actionPerformed(ActionEvent av) {
         String cmd = av.getActionCommand();
         boolean visible = true;
@@ -224,6 +262,10 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         if (!visible) setVisible(false);
     }
 
+    /**
+     * Diese Methode liefert den bearbeiteten Historieneintragsdatensatz zurück.
+     * @return Der bearbeitete Eintrag
+     */
     public Historieneintrag holeHistorieneintrag() { return e; }
 } // -- end class UIswingHEDlg
 

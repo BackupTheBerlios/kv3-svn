@@ -13,7 +13,7 @@
 	<property name="BINJAR" value="kv3.jar" />
 	<target name="classes" description="Erstelle die Java-Klassen zur Ausführung">
 		<mkdir dir="${classes}"/>
-		<javac destdir="${classes}" srcdir="${src}" />
+		<javac destdir="${classes}" srcdir="${src}" debug="false"/>
 	</target>
 	<target name="doc" description="Erstellt die Klassendokumentation mittels javadoc">
 		<javadoc destdir="${doc}" packagenames="${klassenbasis}" sourcepath="${src}" />
@@ -31,6 +31,21 @@
 		<delete file="${BINJAR}" />
 		<delete file="${SRCJAR}" />
 	</target>
+        <target name="dailyrelease" description="Erstellt eine tagesaktuelle JAR-Datei" depends="classes">
+            <tstamp />
+            <jar destfile="${DSTAMP}-${BINJAR}" >
+			<manifest>
+				<attribute name="Build-By" value="Erik Wegner"/>
+				<attribute name="Main-class" value="${klassenbasis}.Kleber"/>
+			</manifest>
+			<fileset dir="${classes}">
+				<include name="**"/>
+			</fileset>
+			<fileset dir="${basedir}">
+				<include name="ressourcen/img/kanister.png"/>				
+			</fileset>			
+            </jar>
+        </target>
 	<target name="jar" description="Erstellt eine ausführbare JAR-Datei" depends="classes">
 		<jar destfile="${BINJAR}">
 			<manifest>

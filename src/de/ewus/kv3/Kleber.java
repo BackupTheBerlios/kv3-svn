@@ -1,3 +1,21 @@
+/*
+ *  This file is part of Kraftstoffverbrauch3.
+ *
+ *  Kraftstoffverbrauch3 is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Kraftstoffverbrauch3 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kraftstoffverbrauch3; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package de.ewus.kv3;
 import java.util.Properties;
 import ml.options.*;
@@ -7,8 +25,7 @@ import java.io.*;
  * Die Klasse Kleber verbindet alle Hilfsklassen zur lauffähigen Anwendung.
  *
  * @author     Erik Wegner
- * @created    1. Oktober 2004
- * @version    3
+ * @version    3.0
  */
 public class Kleber {
     private UITypen targetui;
@@ -41,8 +58,10 @@ public class Kleber {
 
 
     /**
-     *  Diese Methode wird von UIManager aufgerufen, wenn durch die
-     *  Oberfläche neue Werte zur Berechnung bereitstehen.
+     * Diese Methode wird von UIManager aufgerufen, wenn durch die
+     * Oberfläche neue Werte zur Berechnung bereitstehen.
+     * @param strecke Wegstrecke
+     * @param kraftstoff Verbrauchter Kraftstoff
      */
     public void neueWerte(float strecke, float kraftstoff) {
         //System.out.println("Neue Werte");
@@ -51,6 +70,10 @@ public class Kleber {
     }
 
     
+    /**
+     * Wird vom UIManager aufgerufen, wenn der Anwender einen Eintrag der Historie bearbeiten möchte. Die Methode prüft selbstständig, dass die Eintragsnummer gültig ist.
+     * @param eintragnr Nummer des Historieneintrags, der bearbeitet werden soll.
+     */
     public void historieEintragBearbeiten(int eintragnr) {
         if (eintragnr >= 0 && eintragnr < holeHistorie().size()) {
             Historieneintrag e = historie.holeEintragNr(eintragnr);
@@ -64,6 +87,12 @@ public class Kleber {
         }
     }
     
+    /**
+     * Wird vom UIManager aufgerufen, wenn der Anwender die durchgeführte Berechnung der Historie hinzufügen möchte. 
+     * Die Methode sorgt dafür, dass anschließend der Eintrag-Bearbeiten-Dialog aufgerufen wird und bei Auswahl "OK" wird der Eintrag in die Historie eingefügt.
+     * @param strecke Die Wegstrecke
+     * @param kraftstoff Der benötigte Kraftstoff
+     */
     public void historieNeueWerte(float strecke, float kraftstoff) {
         Historieneintrag e = new Historieneintrag(strecke, kraftstoff);
         UIManager.HEDlgErgebnis ergebnis = ui.bearbeiteHistorieneintrag(e);
@@ -272,14 +301,28 @@ public class Kleber {
         return this.gfxeinstellungen;
     }
 
+    /**
+     * Die Methode erlaubt Zugriff auf den Properties-Speicher, der Benutzer- und Programmeinstellungen sichert.
+     * @param key Die Bezeichnung des Schlüssels in der Properties-Datei.
+     * @return Der dem Schlüssel zugeordnete Wert.
+     */
     public String getProperty(String key) {
         return properties.getProperty(key);
     }
     
+    /**
+     * Die Methode erlaubt Zugriff auf den Properties-Speicher, der Benutzer- und Programmeinstellungen sichert.
+     * @param key Die Bezeichnung des Schlüsselwortes.
+     * @param value Der Wert, der dem Schlüsselwort zugeordnet werden soll.
+     */
     public void setProperty(String key, String value) {
         properties.setProperty(key, value);
     }
 
+    /**
+     * Die Methode ermöglicht den Hilfsklassen direkten Zugriff auf die Historien-Klasse.
+     * @return Die Historie der Anwendung.
+     */
     public Historie holeHistorie() {return this.historie;}
     
     /**
