@@ -239,12 +239,16 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         if (command.equals("E")) {tfInhaltLoeschen = true; naechstesFeldAktivieren();}
         if (command.equals("CE")) (aktivesFeld == felder.Kraftstoff ? tfKraftstoff : tfStrecke).setText("");
         if (command.equals("CA")) {tfKraftstoff.setText(""); tfStrecke.setText(""); }
-        if (command.equals("Hist+")) {
+        if (command.equals("+Hist")) {
             // TODO: Historie
             System.out.println("Historie");
+            werteBereitstellen();
+            historieNeueWerte();
         }
     }
 
+    
+    
 
     /**
      *  Adds a feature to the UIElements attribute of the UIswing object
@@ -444,6 +448,13 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         tabbedPane.addTab("Graph", gfxPane);
         tabbedPane.addTab("Info", spia);
         frame.getContentPane().add(tabbedPane);
+    }
+    
+    public HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e) {
+        UIswingHEDlg dlg = new UIswingHEDlg(frame, true, e);
+        dlg.setVisible(true);
+        System.out.println("Dialog fertig, Ergebnis:" + dlg.ergebnis());
+        return  HEDlgErgebnis.OK;
     }
 }
 

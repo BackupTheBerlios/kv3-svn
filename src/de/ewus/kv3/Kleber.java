@@ -23,7 +23,7 @@ public class Kleber {
     public Kleber(String[] args) {
         init(args);
         createUI();
-        ui.startUI();
+        ui.startUI();        
     }
 
 
@@ -37,6 +37,12 @@ public class Kleber {
         ui.setzeStreckeJeLiter(strecke/kraftstoff);
     }
 
+    
+    public void historieNeueWerte(float strecke, float kraftstoff) {
+        Historieneintrag e = new Historieneintrag(strecke, kraftstoff);
+        UIManager.HEDlgErgebnis ergebnis = ui.bearbeiteHistorieneintrag(e);
+        if (ergebnis.equals(UIManager.HEDlgErgebnis.OK)) historie.fuegeHinzu(e);
+    }
 
     /**
      *  Diese Methode wird von UIManager aufgerufen, wenn die
@@ -66,6 +72,7 @@ public class Kleber {
      * @param  args  Die Kommandozeilenparameter
      */
     private void init(String[] args) {
+        historie = new Historie();
         konfig = new Konfiguration("kv3konfig.txt", true);
         //Zuerst alle Optionen auf Standard setzen
         setzeUI(UITypen.swing);

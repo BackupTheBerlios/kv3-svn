@@ -38,4 +38,8 @@ public class UIconsole extends UIManager
 	}
     
     public void dispose() {}
+    
+    public  HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e) {
+        return HEDlgErgebnis.Abbrechen;
+    }
 }

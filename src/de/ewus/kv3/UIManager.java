@@ -9,6 +9,8 @@ import java.lang.reflect.Method;
  * @version    3.0
  */
 public abstract class UIManager {
+    //Ergebnis des Dialogs zur Bearbeitung eines Historieneintrags
+    public enum HEDlgErgebnis{OK,  Abbrechen, Loeschen};
     protected float
         strecke = 0.0f,
         kraftstoff = 0.0f,
@@ -38,6 +40,13 @@ public abstract class UIManager {
     public float holeKraftstoff() {return this.kraftstoff;}*/
     
     /**
+     *  Teilt  Kleber mit, dass neue Werte in die Historie übernommen werden soll
+     */
+    protected void historieNeueWerte() {
+        k.historieNeueWerte(strecke, kraftstoff);
+    }
+    
+    /**
      *  Teilt Kleber mit, dass neue Werte zur Berechnung vorliegen.
      */
     protected void neueWerte() {
@@ -65,5 +74,17 @@ public abstract class UIManager {
      * wenn die Oberfläche dargestellt werden kann
      */
     abstract void startUI();
+    
+    
+    /**
+     *  Diese Methode wird von Kleber aufgerufen, wenn der 
+     *  Historieneintrag e durch den Benutzer bearbeitet werden soll.
+     *  Der Benutzer ändert die Werte des Historieneintrags,
+     *  bestätigt die Änderungen (Rückgabewert OK), verwirrft sie
+     *  (Abbrechen) oder wünscht den Eintrag zu löschen (Loeschen).     
+     *
+     *  @param e        Der zu bearbeitende Historieneintrag
+     */
+    abstract HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e);
 }
 

@@ -31,4 +31,8 @@ public class Historie
 		// put your code here
 		return x + y;
 	}
+    
+    public void fuegeHinzu(Historieneintrag e) {
+        // TODO: fuegeHinzu(Historieneintrag)
+    }
 }
