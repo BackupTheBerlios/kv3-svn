@@ -27,6 +27,8 @@ import java.awt.event.*;
  * @version    1.0
  */
 public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener {
+    private JFrame frame;  //Das Fenster
+    
     /**
      * Constructor for objects of class UIswing
      */
@@ -87,10 +89,14 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      * @param  e  Description of the Parameter
      */
     public void windowClosing(WindowEvent e) {
-        super.quitApp();
+        quitApp();
     }
 
 
+    public void dispose() {
+        frame.dispose();
+    }
+    
     /**
      *  Description of the Method
      */
@@ -107,7 +113,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         /*
          *  create and show the GUI
          */
-        JFrame frame = new JFrame("Kraftstoffverbrauch 3.0");
+        frame = new JFrame("Kraftstoffverbrauch 3.0");
         ImageIcon icon = new ImageIcon("kanister.png", "Kanister");
         frame.setIconImage(icon.getImage());
         addUIElements(frame);

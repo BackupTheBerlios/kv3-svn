@@ -36,4 +36,6 @@ public class UIconsole extends UIManager
 	public void startUI() {
 	    super.neueWerte();
 	}
+    
+    public void dispose() {}
 }

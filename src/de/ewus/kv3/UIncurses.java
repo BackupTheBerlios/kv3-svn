@@ -36,4 +36,6 @@ public class UIncurses extends UIManager
 	public void startUI() {
 	    super.neueWerte();
 	}
+    
+    public void dispose() {}
 }

@@ -4,12 +4,14 @@ import java.lang.reflect.Method;
 /**
  * Abstract class UIManager - write a description of the class here
  *
- *
  * @author     Erik Wegner
  * @created    1. Oktober 2004
  * @version    3.0
  */
 public abstract class UIManager {
+    /**
+     *  Description of the Field
+     */
     protected Kleber k;
 
 
@@ -37,6 +39,13 @@ public abstract class UIManager {
     protected void quitApp() {
         k.quitApp();
     }
+
+
+    /**
+     *  Wird von Kleber aufgerufen, um die UI-Ressourcen freizugeben,
+     *  anschlieﬂend wird die Anwendung beendet.
+     */
+    abstract void dispose();
 
 
     /**

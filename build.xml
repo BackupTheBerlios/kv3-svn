@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-15"?>
 <project default="classes" name="Kraftstoffverbrauch 3">
 	<description>
 	Berechnet den Kraftstoffverbrauch und speichert die Daten
@@ -20,7 +20,7 @@
 		<delete dir="${classes}" />
 		<delete dir="${doc}" />
 	</target>
-	<target name="jar" description="Erstellt eine ausführbare JAR-Datei" depends="classes">
+	<target name="jar" description="Erstellt eine ausfÃŒhrbare JAR-Datei" depends="classes">
 		<jar basedir="${classes}" destfile="kv3.jar">
 			<manifest>
 				<attribute name="Build-By" value="Erik Wegner"/>
@@ -34,5 +34,8 @@
 				<attribute name="Build-By" value="Erik Wegner"/>
 			</manifest>
 		</jar>
+	</target>
+	<target name="run" depends="jar" description="Führt die Anwendung aus">
+		<java jar="kv3.jar" fork="true"/>		
 	</target>
 </project>
