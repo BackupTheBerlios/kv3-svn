@@ -22,7 +22,8 @@ public class Kleber {
     
     private final String
         CFGDATEI = "cfgDatei",
-        CFGFORMAT = "cfgFormat";
+        CFGFORMAT = "cfgFormat",
+        DEFAULTUI = "defaultUI";
 
     /**
      * Constructor for objects of class Kleber
@@ -119,7 +120,7 @@ public class Kleber {
             historie = new Historie();
             //konfig = new Konfiguration("kv3konfig.txt", true);
             // DONE: properties aus Datei laden
-            properties = new Properties();
+            properties = new Properties();            
             liesProperties();
             
             //Zuerst alle Optionen auf Standard setzen
@@ -130,6 +131,8 @@ public class Kleber {
             //Suche nach Konfigurationsoptionen in der konfig-Datei
             // TODO: Suche nach Konfigurationsoptionen in der konfig-Datei
             //if !properties.getValue("defaultui").equals("") setzeUI;
+            String propDefUI = getProperty(DEFAULTUI);
+            if (propDefUI != null) if (!propDefUI.equals("")) setzeUI(propDefUI);
             
             
             //Setze Optionen aus der Kommandozeile

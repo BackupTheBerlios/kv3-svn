@@ -18,6 +18,11 @@
 	<target name="doc" description="Erstellt die Klassendokumentation mittels javadoc">
 		<javadoc destdir="${doc}" packagenames="${klassenbasis}" sourcepath="${src}" />
 	</target>
+	<target name="pdf" description="Erstellt die Klassendokumentation mittels javadoc">
+		<exec executable="pdflatex" dir="${doc}">
+			<arg line="../src/latex/Programmbeschreibung" />
+		</exec>
+	</target>	
 	<target name="all" depends="jar,doc,srcjar" description="Erstellt alles">
 	</target>
 	<target name="clean" description="Entfernt die Java-Klassen und die erstellte Dokumentation">

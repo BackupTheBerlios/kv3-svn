@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inhalt>
+	<abschnitt>
+		<u>Parameter</u>
+		<text>
+			Treten bei der Verarbeitung der Konfigurationsdatei Probleme auf,
+			so wird beim Verlassen der Anwendung eine neue Konfigurationsdatei
+			mit der zusätzlichen Endung "fix" erzeugt.
+		</text>
+		<param>
+			<cli>-ui=</cli>
+			<cfg>defaultUI</cfg>
+			<beschreibung kurz="Stellt die Oberfläche ein.">
+				<p>Der Parameter steuert, welche Oberfläche die
+				Anwendung zur Verfügung stellt.</p>
+				<p>Zur Auswahl stehen swing, console, ncurses</p>				
+			</beschreibung>
+		</param>
+		<param>
+			<cli>-cfgDatei=</cli>
+			<cfg>cfgDatei</cfg>
+			<beschreibung kurz="Auswahl der Konfigurationsdatei">
+			</beschreibung>
+		</param>
+		<param>
+			<cli>-cfgFormat=</cli>
+			<cfg>cfgFormat</cfg>
+			<beschreibung kurz="Auswahl des Formats der Konfigurationsdatei">
+			</beschreibung>
+		</param>
+	</abschnitt>
+</inhalt>

@@ -1,0 +1,17 @@
+\documentclass{article}
+
+\begin{document}
+\section{Kommandozeilen- und Konfigurationsdateiparameter}
+Kommandozeilenparameter haben Vorrang vor Konfigurationsdateiparametern.
+
+\begin{tabular}{lll}
+Kommandozeile & Konfigurationsdatei & Bedeutung \\
+-ui=        & defaultUI & Stellt die Oberfläche ein. \\
+-cfgFormat= & cfgFormat & Wählt das Format der Konfigdatei. \\
+-cfgDatei=  & cfgDatei  & Übergibt den Dateinamen der Konfigdatei.
+\end{tabular}
+
+Treten beim Verarbeiten der Konfigurationsdatei Fehler auf, wird beim Beenden
+der Anwendung eine neue Datei mit der zusätzlichen Endung "fix" erzeugt.
+\end{document}
+

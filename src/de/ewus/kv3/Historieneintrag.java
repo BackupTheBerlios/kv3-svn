@@ -14,10 +14,33 @@ public class Historieneintrag {
     private Streckentyp streckentyp = Streckentyp.Unbekannt;    
     
     public final int maxFahrzeug = 10;
+    public final String trenner = ",";
     
     public Historieneintrag(float strecke, float kraftstoff) {
         setzeStrecke(strecke);
         setzeKraftstoff(kraftstoff);
+    }
+    
+    public Historieneintrag(String serial) {
+        String[] teile = serial.split(",");
+        int c1 = 0;
+        try { setzeStrecke(Float.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
+        try { setzeKraftstoff(Float.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
+        try { setzePreis(Float.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
+        try { setzeFahrzeug(Integer.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
+        setzeStreckentyp(streckentyp.valueOf(streckentyp.getDeclaringClass(), teile[c1++]));
+        try { datum.setTime(Long.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
+    }
+    
+    public String toString() {
+        StringBuffer sb = new StringBuffer("");
+        sb.append(holeStrecke()); sb.append(trenner);
+        sb.append(holeKraftstoff()); sb.append(trenner);
+        sb.append(holePreis()); sb.append(trenner);
+        sb.append(holeFahrzeug()); sb.append(trenner);
+        sb.append(holeStreckentyp()); sb.append(trenner);
+        sb.append(datum.getTime());
+        return sb.toString();
     }
     
 	public float        holeStrecke()     { return this.strecke;     }
