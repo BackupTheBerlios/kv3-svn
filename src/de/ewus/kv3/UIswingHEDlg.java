@@ -23,6 +23,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 /**
  * Eine Klasse zur Darstellung des Historieneintrag-bearbeiten-Dialogs im Java Swing-Stil.
@@ -41,7 +43,8 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
     private JButton btButton;
     private Historieneintrag e;
     private UIManager.HEDlgErgebnis ergebnis;
-
+    private NumberFormat nf;
+    
     /**
      * Die Methode liefert nach Ausführen des Dialogs das Dialogergebnis zurück.
      * @return Die Benutzerauswahl zum Schließen des Dialogs.
@@ -58,6 +61,8 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
 	 */
 	public UIswingHEDlg(Frame owner, boolean modal, Historieneintrag e) {
         super(owner, "Eintrag bearbeiten", modal);
+        
+        this.nf = NumberFormat.getInstance();
         
         this.e = e;
         this.ergebnis = UIManager.HEDlgErgebnis.Abbrechen;
@@ -200,11 +205,15 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
      *  @return         wahr, wenn beim Umwandeln kein Fehler auftrat
      */
     private boolean kannUmwandeln(String text) {
-        boolean r = false;
+        boolean r = false;               
         try {
             float f = Float.valueOf(text);
             r = true;
-        } catch (NumberFormatException e) {}
+        } catch (NumberFormatException e) {}        
+        try {
+            Number n = nf.parse(text);
+            r = true;
+        } catch(ParseException e) {}
         return r;
     }
     
@@ -222,16 +231,31 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         return r;
     }
     
-    private float toFloat(String f) {
+    private float umwandeln(String f) {        
         float r = 0.0f;
-        try { r = Float.valueOf(f); } catch (NumberFormatException e) {};
+        try {
+            r = Float.valueOf(f);
+        } 
+        catch (NumberFormatException nfe) {        
+            try { 
+                Number n = nf.parse(f);
+                if (n instanceof Long) {
+                    Long nlong = (Long)n;
+                    r = (float)(nlong.longValue());
+                }
+                if (n instanceof Double) {
+                    Double ndouble = (Double)n;
+                    r = (float)(ndouble.doubleValue());
+                }
+            } catch (ParseException pe) { };
+        }
         return r;
     }
     
     private void neueWerteFuerE() {
-        e.setzeStrecke(toFloat(tfStrecke.getText()));
-        e.setzeKraftstoff(toFloat(tfKraftstoff.getText()));
-        e.setzePreis(toFloat(tfPreis.getText()));
+        e.setzeStrecke(umwandeln(tfStrecke.getText()));
+        e.setzeKraftstoff(umwandeln(tfKraftstoff.getText()));
+        e.setzePreis(umwandeln(tfPreis.getText()));
         e.setzeFahrzeug(cbFahrzeug.getSelectedIndex());
         e.setzeStreckentyp(cbStreckentyp.getSelectedIndex());
         e.setzeDatum(tfDatum.getText());

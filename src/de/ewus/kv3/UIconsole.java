@@ -19,6 +19,7 @@
 package de.ewus.kv3;
 
 import java.io.*;
+import java.awt.image.*;
 
 /**
  * Diese Klasse bietet eine Programmschnittstelle auf CLI-Ebene.
@@ -239,4 +240,9 @@ public class UIconsole extends UIManager
 	menuEintrag(taste, "Wert fuer " + Historieneintrag.feldNamen[feld] +
 		    " aendern (" + e.feld(feld) + ")");
     }
+    
+    public void diagrammFertig(BufferedImage diagramm) {
+        
+    }
+    
 }

@@ -18,6 +18,7 @@
 
 package de.ewus.kv3;
 import java.io.*;
+import java.awt.image.*;
 
 /**
  * Abstract class UIManager - stellt die Methoden bereit, die
@@ -45,23 +46,17 @@ public abstract class UIManager {
          */
         Loeschen };
     protected float
-        /**
-         * Die Variable speichert die letzte Eingabe der Wegstrecke.
-         */
+        /** Die Variable speichert die letzte Eingabe der Wegstrecke. */
         strecke = 0.0f,
-        /**
-         * Die Variable speichert die letzte Eingabe des Kraftstoffs.
-         */
+        /** Die Variable speichert die letzte Eingabe des Kraftstoffs. */
         kraftstoff = 0.0f,        
-        /**
-         * Die Variable speichert das letzte Berechnungsergebnis für Verbrauch je 100 Kilometern.
-         */
+        /** Die Variable speichert das letzte Berechnungsergebnis für Verbrauch je 100 Kilometern. */
         ver100 = 0.0f,
-        /**
-         * Die Variable speichert das letzte Berechnungsergebnis für Strecke je 100 Kilometern.
-         */
+        /** Die Variable speichert das letzte Berechnungsergebnis für Strecke je 100 Kilometern. */
         strLtr = 0.0f;
         
+    /** Die Grafikeinstellungen speichern alle Einstellungen zur Diagrammerzeugung */
+    protected GfxEinstellungen ge;
         
     /**
      *  Description of the Field
@@ -75,6 +70,7 @@ public abstract class UIManager {
      */
     public void setzeKleber(Kleber kleber) {
         this.kleber = kleber;
+        ge = kleber.holeGfxEinstellungen();
     }
 
 
@@ -94,6 +90,15 @@ public abstract class UIManager {
      */
     protected void historieNeueWerte() {
         kleber.historieNeueWerte(strecke, kraftstoff);
+    }
+    
+    /**
+     * Ermittelt die Anzahl der in der Historie gespeicherten Einträge.
+     *
+     * @return Anzahl der Einträge
+     */
+    protected long historieAnzahlEintraege() {
+        return kleber.holeHistorie().size();
     }
     
     /**
@@ -164,6 +169,17 @@ public abstract class UIManager {
      */
     abstract HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e);
 
+    /**
+     * Das Diagramm wurde erzeugt.
+     *
+     * Die Methode wird von Kleber aufgerufen, wenn die Bearbeitung
+     * des Diagramms abgeschlossen ist und durch die Oberfläche dargestellt 
+     * werden kann.
+     * 
+     * @param diagramm  Das Bild, das das Diagramm enthält.
+     */
+    abstract void diagrammFertig(BufferedImage diagramm);
+    
     /**
      * Bietet abeleiteten Klassen die Möglichkeit, eine einfache Umwandlung einer Zeichenkette in Integer vorzunehmen. Fehler werden durch die Klasse abgefangen, der Rückgabewert ist dann 0.
      * @param fs Eine Zeichenkette mit einer Integerdarstellung

@@ -22,6 +22,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 import java.net.URL;
 
 /**
@@ -30,23 +31,56 @@ import java.net.URL;
  * @author     Erik Wegner
  * @version    1.0
  */
-public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, ListSelectionListener {
+public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, ListSelectionListener, ComponentListener {
     private JFrame frame;  //Das Fenster
     private JLabel lStrecke, lKraftstoff, //Labels mit wechselnder Hintergrundfarbe
         lErgebnis;
     private JTextField tfStrecke, tfKraftstoff; //Textfelder für Eingabe
     private JTable histTable; //Tabelle der Historie
+    private UIswingDiagramm diagrammPanel; // Panel zur Darstellung des Diagramms
     
     private enum felder {Kraftstoff, Strecke};
     private felder aktivesFeld = felder.Kraftstoff;
     private boolean tfInhaltLoeschen = false;
+    private final String diagrammPanelName = "diagrammPanel";
+    private JTabbedPane tabbedPane;
     
     /**
      * Constructor for objects of class UIswing
      */
-    public UIswing() { }
+    public UIswing() {         
+    }
 
-        /**
+    
+    public void componentHidden(ComponentEvent e) {
+        //Nichts zu tun
+        //System.out.println("EHidden " + e.getComponent().getName());
+    }
+          
+    public void componentMoved(ComponentEvent e) {
+        //Nichts zu tun
+        //System.out.println("EMoved " + e.getComponent().getName());
+    }
+          
+    public void componentResized(ComponentEvent e) {
+        Component c = e.getComponent();
+        if (c.equals(diagrammPanel)) {
+            System.out.println("EResized " + c.getName());
+            ge.breite = c.getSize().width;
+            ge.hoehe = c.getSize().height;
+            if (diagrammPanel.isVisible()) {
+                System.out.println("Panel ist sichtbar, Größe " + ge.breite + "x" + ge.hoehe);
+                kleber.starteDiagrammerzeugung();
+            } else System.out.println("Panel ist unsichtbar");
+        }
+    }
+
+    public void componentShown(ComponentEvent e) {
+        //System.out.println("EShow " + e.getComponent().getName());
+        kleber.starteDiagrammerzeugung();
+    }
+ 
+   /**
      * Handle the key typed event from the text field.
      * @param e Ereignis
      */
@@ -248,10 +282,13 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         if (command.equals("CE")) (aktivesFeld == felder.Kraftstoff ? tfKraftstoff : tfStrecke).setText("");
         if (command.equals("CA")) {tfKraftstoff.setText(""); tfStrecke.setText(""); }
         if (command.equals("+Hist")) {
-            // TODO: Historie
-            System.out.println("Historie");
+            // DONE: Historie
+            //System.out.println("Historie");
+            long anzahl = historieAnzahlEintraege();
+            zeigeSeiteHistorie();            
             werteBereitstellen();
             historieNeueWerte();
+            if (historieAnzahlEintraege() == anzahl) zeigeSeiteEingabe();            
         }
     }
 
@@ -369,16 +406,27 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         JPanel p31 = new JPanel(new GridBagLayout()); gfxPane.addTab("Achsen", p31);
         JPanel p32 = new JPanel(new GridBagLayout()); gfxPane.addTab("Punkte", p32);
         JPanel p33 = new JPanel(new BorderLayout()); gfxPane.addTab("Filter", p33);
-        JPanel p34 = new JPanel(new BorderLayout()); gfxPane.addTab("Grafik", p34);
+        diagrammPanel = new UIswingDiagramm(); 
+        diagrammPanel.setName(diagrammPanelName);
+        gfxPane.addTab("Grafik", diagrammPanel);
+        diagrammPanel.addComponentListener(this);
         //Seite Grafik, Achsen
         JComboBox xliste = new JComboBox(); JComboBox yliste = new JComboBox();
         GfxEinstellungen gfxe = this.kleber.holeGfxEinstellungen();
+	for (int c1 = 0; c1<Historieneintrag.anzahlFelder; c1++) {
+	    xliste.addItem(Historieneintrag.feldNamen[c1]);
+	    yliste.addItem(Historieneintrag.feldNamen[c1]);
+	};
+	xliste.setSelectedIndex(gfxe.xAchse);
+	yliste.setSelectedIndex(gfxe.yAchse);
+	/*
         for (GfxEinstellungen.AchsenListe a : GfxEinstellungen.AchsenListe.values()) {
             xliste.addItem(a.bezeichnung());
             yliste.addItem(a.bezeichnung());
             if (a.equals(gfxe.xAchse)) xliste.setSelectedIndex(xliste.getItemCount()-1);
             if (a.equals(gfxe.yAchse)) yliste.setSelectedIndex(yliste.getItemCount()-1);
         }
+	*/
         JComboBox sortliste = new JComboBox();
         for (GfxEinstellungen.Sortierung s :GfxEinstellungen.Sortierung.values()) {
             sortliste.addItem(s.bezeichnung());
@@ -451,7 +499,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
             "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</p>"+
             "</html>");
         //Eingabe, Historie, Grafik, Info
-        JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
+        tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
         tabbedPane.setFont(f2);
         tabbedPane.addTab("Eingabe", p1);
         tabbedPane.addTab("Historie", p2);
@@ -466,5 +514,18 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         //System.out.println("Dialog fertig, Ergebnis:" + dlg.holeErgebnis());
         return dlg.holeErgebnis();
     }
+    
+    public void diagrammFertig(BufferedImage diagramm) {
+        diagrammPanel.setImage(diagramm);
+        System.out.println("Grafik gezeichnet");
+    }
+    
+    private void zeigeSeiteHistorie() {
+        tabbedPane.setSelectedIndex(1);
+    }
+    
+    private void zeigeSeiteEingabe() {
+        tabbedPane.setSelectedIndex(0);
+    }
+    
 }
-

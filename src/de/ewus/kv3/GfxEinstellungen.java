@@ -31,16 +31,17 @@ public class GfxEinstellungen extends java.lang.Object
 	/**
 	 * Die Breite der erzeugten Grafik
 	 */
-	breite,
+	breite = 640,
 	/**
 	 * Die Höhe der erzeugten Grafik
 	 */
-	hoehe;
-    /*
+	hoehe = 480;
+
+    /**
      * Gibt an, ob Linien zwischen den Punkten gezeichnet werden sollen
      */
     public boolean zeichneLinie;
-
+    
     public enum Sortierung {
         KEINE("Keine"), 
         XUP( "X aufsteigend"), 
@@ -58,6 +59,7 @@ public class GfxEinstellungen extends java.lang.Object
         }
     } 
     
+    /*
     public enum AchsenListe {
         Kraftstoffmenge("Kraftstoffmenge"), 
         Strecke("Strecke"), 
@@ -76,7 +78,8 @@ public class GfxEinstellungen extends java.lang.Object
             return this.bezeichnung;
         }
     }
-    
+    */
+
     public enum Drehung {
         D0(  "0 Grad", 0), 
         D1( "90 Grad", 1), 
@@ -95,27 +98,49 @@ public class GfxEinstellungen extends java.lang.Object
             return this.bezeichnung;
         }
   
-  public int drehschritte() {
-      return this.drehschritte;
-  }
-}
-    public AchsenListe
-        xAchse=AchsenListe.Kraftstoffmenge,
-        yAchse=AchsenListe.Kraftstoffmenge;
+	public int drehschritte() {
+	    return this.drehschritte;
+	}
+    }
+
+    public int
+	/** Einstellung für Wertequelle x-Achse */
+        xAchse,
+	/** Einstellung für Wertequelle y-Achse */
+        yAchse;
+
+    /** Einstellung zur Sortierung der Grafikpunkte */
     public Sortierung 
         sortierung = Sortierung.KEINE;
+
+    /** Einstellung für die Drehung der Grafikausgabe */
     public Drehung 
         drehung = Drehung.D0;
-    
-	public GfxEinstellungen() {
-        setzeString2xAchse("Kraftstoffmenge");
-        setzeString2yAchse("Strecke");
+
+    /**
+     * Konstruktor für die GfxEinstellungen
+     *
+     * Folgende Voreinstellungen werden aktiviert:
+     * <ul>
+     *   <li>x-Achse = Kraftstoff</li>
+     *   <li>y-Achse = Strecke</li>
+     *   <li>Sortierung = x aufsteigend</li>
+     *   <li>Drechung = 0 Grad</li>
+     * </ul> 
+     */
+    public GfxEinstellungen() {
+        //setzeString2xAchse("Kraftstoffmenge");
+        //setzeString2yAchse("Strecke");
         setzeString2sortierung("XUP");
         setzeString2drehung("D0");
-		/*this.xAchse = AchsenListe.Kraftstoffmenge;
+	xAchse = Historieneintrag.KRAFTSTOFF;
+	yAchse = Historieneintrag.STRECKE;
+	/*
+	this.xAchse = AchsenListe.Kraftstoffmenge;
         this.yAchse = AchsenListe.Strecke;
         this.sortierung = Sortierung.XUP;
-        this.drehung = Drehung.D0;*/
+        this.drehung = Drehung.D0;
+	*/
 	}
     
     public void setzeString2drehung(String v) {
@@ -124,12 +149,15 @@ public class GfxEinstellungen extends java.lang.Object
     public void setzeString2sortierung(String v) {
         sortierung = sortierung.valueOf(sortierung.getDeclaringClass(), v);        
     }
+    /*
     public void setzeString2xAchse(String v) {
         xAchse = xAchse.valueOf(xAchse.getDeclaringClass(), v);
     }
+    
     public void setzeString2yAchse(String v) {
         yAchse = xAchse.valueOf(yAchse.getDeclaringClass(), v);
     }
+    */
     
 } 
 

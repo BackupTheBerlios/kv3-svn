@@ -20,6 +20,7 @@ package de.ewus.kv3;
 import java.util.Properties;
 import ml.options.*;
 import java.io.*;
+import java.awt.image.*;
 
 /**
  * Die Klasse Kleber verbindet alle Hilfsklassen zur lauffähigen Anwendung.
@@ -34,6 +35,7 @@ public class Kleber {
     private UIManager ui;
     private Historie historie;
     private GfxEinstellungen gfxeinstellungen;
+    private Grafikfabrik gfxfabrik;
     private ml.options.Options opt;
     private boolean hasCLIOptions = false;
     
@@ -69,7 +71,27 @@ public class Kleber {
         ui.setzeStreckeJeLiter(strecke/kraftstoff);
     }
 
-    
+    /*
+     * Die Methode startet die Diagrammerzeugung.
+     *
+     * Diese Methode wird durch die Oberfläche aufgerufen, wenn ein
+     * Diagramm erzeugt werden soll. Die Einstellungen dazu finden sich
+     * in den GfxEinstellungen
+     *
+     * @see GfxEinstellungen
+     * @see gfxeinstellungen
+     */
+    public void starteDiagrammerzeugung() {
+        gfxfabrik.start();
+    }
+
+    /**
+     * Diese Methode wird von der Grafikfabrik aufgerufen, wenn das Diagramm vollendet ist.
+     */
+    public void diagrammFertig(BufferedImage i){
+        ui.diagrammFertig(i);
+    }
+        
     /**
      * Wird vom UIManager aufgerufen, wenn der Anwender einen Eintrag der Historie bearbeiten möchte. Die Methode prüft selbstständig, dass die Eintragsnummer gültig ist.
      * @param eintragnr Nummer des Historieneintrags, der bearbeitet werden soll.
@@ -186,13 +208,14 @@ public class Kleber {
             //if !properties.getValue("defaultui").equals("") setzeUI;
             String propDefUI = getProperty(DEFAULTUI);
             if (propDefUI != null) if (!propDefUI.equals("")) setzeUI(propDefUI);
-            System.out.println(DEFAULTUI + " = " + propDefUI);
+            //System.out.println(DEFAULTUI + " = " + propDefUI);
             
             //Setze Optionen aus der Kommandozeile
             // TODO: Setze Optionen aus der Kommandozeile
             if (opt.getSet().isSet("ui")) setzeUI(opt.getSet().getOption("ui").getResultValue(0));
     
         }
+        gfxfabrik = new Grafikfabrik(this);
     }
 
     
@@ -325,13 +348,6 @@ public class Kleber {
      */
     public Historie holeHistorie() {return this.historie;}
 
-    /**
-     * Diese Methode wird von der Grafikfabrik aufgerufen, wenn das Diagramm vollendet ist.
-     */
-    public void diagrammFertig() {
-	abstract();
-    }
-    
     /**
      * Der Einsprungpunkt für die Anwendung
      *

@@ -25,19 +25,18 @@ package de.ewus.kv3;
  * @version    1.0
  */
 public class GfxPunkt {
-    public int 
-	/** 
-	 * x-Wert 
-	 */
-	x, 
-	/** 
-	 * y-Wert 
-	 */
-	y, 
-	/** 
-	 * z-Wert (z.B. Farbe)
-	 */
-	z;
+    
+    /** x-Wert */
+    public float x;
+    
+    /** y-Wert */
+    public float y;
+	
+    /** 
+      * z-Wert 
+      *
+      * (z.B. Farbe) */
+    public int z;
     
     /**
      * Constructor für GfxPunkt
@@ -45,6 +44,15 @@ public class GfxPunkt {
      * Die Werte für x, y, und z werden auf 0 gesetzt.
      */
     public GfxPunkt() {
-	x = y = z = 0;
+	x = y = 0.0f;
+	z = 0;
+    }
+    /**
+     * Wandelt den GfxPunkt zur Ausgabe in eine Zeichenkette
+     *
+     * @return Die Zeichenkette zur Repräsentation des Punkts
+     */
+    public String toString() {
+	return "GfxPunkt: " + x + "," + y + "," + z;
     }
 }

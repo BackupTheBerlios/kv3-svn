@@ -112,11 +112,18 @@ public class Historieneintrag {
          */
         PREIS = 7;
 
-    private NumberFormat nf;
+    private NumberFormat 
+        /** Formatierung auf 2 Stellen */ 
+        nf2nks, //_N_ach_K_omma_S_tellen
+        /** Formatierung auf 3 Stelle */
+        nf3nks;
 
     private void initNF() {
-	this.nf = NumberFormat.getInstance();
-	this.nf.setMaximumFractionDigits(2);
+	this.nf2nks = NumberFormat.getInstance();
+	this.nf2nks.setMaximumFractionDigits(2);
+        //this.nf.setMinimumFractionDigits(2);
+        this.nf3nks = NumberFormat.getInstance();
+        this.nf3nks.setMaximumFractionDigits(3);
     }
 
     /**
@@ -172,19 +179,20 @@ public class Historieneintrag {
         sb.append(holeDatum());
         return sb.toString();
     }
-    
+
     /**
-     * Die Methode erwartet eine der Feld-Konstanten und gibt den entsprechenden Wert zurück.
+     * Die Methode erwartet eine der Feld-Konstanten und gibt den 
+     * entsprechenden Wert zurück.
      * @param feldnummer Eine Konstante, die angibt, welches Datenfeld geliefert werden soll.
      * @return Eine formatierte Zeichenkette, die das Datenfeld darstellt.
      */
     public String feld(int feldnummer) {
         String r = "";	
         switch (feldnummer) {
-            case STRECKE        : r = nf.format(holeStrecke()); break;
-            case KRAFTSTOFF     : r = nf.format(holeKraftstoff()); break;
-            case KRAFTSTOFF100  : r = nf.format(holeVerbrauch100km()); break;
-            case STRECKEJELITER : r = nf.format(holeStreckeJeLiter()); break;
+            case STRECKE        : r = nf2nks.format(holeStrecke()); break;
+            case KRAFTSTOFF     : r = nf2nks.format(holeKraftstoff()); break;
+            case KRAFTSTOFF100  : r = nf2nks.format(holeVerbrauch100km()); break;
+            case STRECKEJELITER : r = nf2nks.format(holeStreckeJeLiter()); break;
             case DATUM          : r = holeDatum(); break;
             case FAHRZEUG       : r = Integer.toString(holeFahrzeug()); break;
             case STRECKENTYP    : switch (holeStreckentyp()) {
@@ -193,7 +201,7 @@ public class Historieneintrag {
                 case Land           : r = "L"; break;
             }
             break;
-            case PREIS          : r = Float.toString(holePreis()); break;
+            case PREIS          : r = nf3nks.format(holePreis()); break;
         }
         return r;
     }

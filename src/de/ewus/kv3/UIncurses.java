@@ -18,6 +18,9 @@
 
 package de.ewus.kv3;
 
+
+import java.awt.image.*;
+
 /**
  * Diese Klasse bietet eine ncurses-basierte Programmoberfläche.
  *
@@ -59,4 +62,9 @@ public class UIncurses extends UIManager
     public HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e) {
         return HEDlgErgebnis.Abbrechen;
     }
+    
+    public void diagrammFertig(BufferedImage diagramm) {
+        
+    }
+    
 }
