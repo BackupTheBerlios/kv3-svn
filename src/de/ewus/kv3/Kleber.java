@@ -65,6 +65,7 @@ public class Kleber {
         // QUESTION: System.exit oder ui.dispose();
         ui.dispose();
         historie.schreibHistorie(getProperty(HISTORIEDATEI));
+	historie.dispose();
         schreibProperties();
         //System.exit(0);
     }
@@ -76,6 +77,9 @@ public class Kleber {
      */
     private void createUI() {
         switch (this.targetui) {
+	    console : 
+		ui = new UIconsole();
+	    break;
             default:
                 ui = new UIswing();
         }
@@ -119,11 +123,11 @@ public class Kleber {
             hinweiseKommandozeile(opt.getCheckErrors());
             System.exit(1);
         } else {        
-            historie = new Historie();
             //konfig = new Konfiguration("kv3konfig.txt", true);
             // DONE: properties aus Datei laden
             properties = new Properties();            
             liesProperties();
+            historie = new Historie(this);
             
             //Zuerst alle Optionen auf Standard setzen
             setzeUI("swing");
@@ -263,6 +267,8 @@ public class Kleber {
         properties.setProperty(key, value);
     }
 
+    public Historie holeHistorie() {return this.historie;}
+    
     /**
      * Der Einsprungpunkt für die Anwendung
      *

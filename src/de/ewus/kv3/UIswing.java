@@ -1,5 +1,6 @@
 package de.ewus.kv3;
 import javax.swing.*;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
@@ -347,8 +348,9 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
 
         //Seite Historie
         JPanel p2 = new JPanel(new BorderLayout());
-        JList liste = new JList();
-        JScrollPane lsp = new JScrollPane(liste);
+        JTable table = new JTable(k.holeHistorie());
+        //JList liste = new JList();
+        JScrollPane lsp = new JScrollPane(table);
         p2.add(lsp, BorderLayout.CENTER);
         p2.add(new JLabel("Gesamtdurchschnitt"), BorderLayout.SOUTH);
         //Seite Grafik

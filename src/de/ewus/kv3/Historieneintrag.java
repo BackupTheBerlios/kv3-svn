@@ -43,6 +43,9 @@ public class Historieneintrag {
         return sb.toString();
     }
     
+    public float        holeVerbrauch100km() {return kraftstoff*100/strecke;}
+    public float        holeStreckeJeLiter() {return strecke/kraftstoff; }
+    
 	public float        holeStrecke()     { return this.strecke;     }
     public float        holeKraftstoff()  { return this.kraftstoff;  }
     public float        holePreis()       { return this.preis;       }

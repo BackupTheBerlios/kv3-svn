@@ -75,6 +75,15 @@ public abstract class UIManager {
      */
     abstract void startUI();
     
+
+    protected String getProperty(String key) {
+        return k.getProperty(key);
+    }
+    
+    protected void setProperty(String key, String value) {
+        k.setProperty(key, value);
+    }
+
     
     /**
      *  Diese Methode wird von Kleber aufgerufen, wenn der 
