@@ -27,7 +27,10 @@ public class UIconsole extends UIManager
 	HEDatum = "d",
 	HEPreis = "p", 
 	HEFahrzeug = "f",
-	HEStreckentyp = "t";
+	HEStreckentyp = "t",
+    HEOK = "o!",
+    HEAbbrechen = "a!",
+    HELoeschen = "l!";
 
     private BufferedReader br;
     private boolean eingabeOK = false;
@@ -119,8 +122,8 @@ public class UIconsole extends UIManager
     }
 
     private void menuHistorie() {
-	navUeberschrift("Historie");
-	dumpHistorie();
+        navUeberschrift("Historie");
+        dumpHistorie();        
     }
 
     private void menuRechnen() {
@@ -152,17 +155,62 @@ public class UIconsole extends UIManager
     public HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e) {
 	//System.out.println("\nHistorieneintrag:" + e + "\n");
 	//TODO: menuEintrag aus e.getFeldbezeichnung() generieren
-	navUeberschrift("Historieneintrag bearbeiten");
-	menuHE1(HEStrecke, Historieneintrag.STRECKE, e);
-	menuHE1(HEKraftstoff, Historieneintrag.KRAFTSTOFF, e);
-	menuHE1(HEDatum, Historieneintrag.DATUM, e);
-	menuHE1(HEPreis, Historieneintrag.PREIS, e);
-	menuHE1(HEFahrzeug, Historieneintrag.FAHRZEUG, e);
-	menuHE1(HEStreckentyp, Historieneintrag.STRECKENTYP, e);
-
-        return HEDlgErgebnis.Abbrechen;
+        HEDlgErgebnis r = HEDlgErgebnis.Abbrechen;
+	    String antwort; boolean weiterbearbeiten = true;
+        do {
+            navUeberschrift("Historieneintrag bearbeiten");
+            menuHE1(HEStrecke, Historieneintrag.STRECKE, e);
+            menuHE1(HEKraftstoff, Historieneintrag.KRAFTSTOFF, e);
+            menuHE1(HEDatum, Historieneintrag.DATUM, e);
+            menuHE1(HEPreis, Historieneintrag.PREIS, e);
+            menuHE1(HEFahrzeug, Historieneintrag.FAHRZEUG, e);
+            menuHE1(HEStreckentyp, Historieneintrag.STRECKENTYP, e);
+            menuEintrag(HEOK, "Eingaben OK");
+            menuEintrag(HEAbbrechen, "Eingabe abbrechen");
+            menuEintrag(HELoeschen, "Eintrag aus der Historie loeschen");
+            
+             antwort = eingabe();
+             if (antwort.equals(HEOK) || antwort.equals(HEAbbrechen) || antwort.equals(HELoeschen)) {
+                 weiterbearbeiten = false;
+                 if (antwort.equals(HEOK)) r = HEDlgErgebnis.OK;
+                 if (antwort.equals(HEAbbrechen)) r = HEDlgErgebnis.Abbrechen;
+                 if (antwort.equals(HELoeschen)) r = HEDlgErgebnis.Loeschen;
+             }
+             if (antwort.equals(HEStrecke)) bearbeiteFeld(e, HEStrecke);
+             if (antwort.equals(HEKraftstoff)) bearbeiteFeld(e, HEKraftstoff);
+             if (antwort.equals(HEDatum)) bearbeiteFeld(e, HEDatum);
+             if (antwort.equals(HEPreis)) bearbeiteFeld(e, HEPreis);
+             if (antwort.equals(HEFahrzeug)) bearbeiteFeld(e, HEFahrzeug);
+             if (antwort.equals(HEStreckentyp)) bearbeiteFeld(e, HEStreckentyp);
+        } while (weiterbearbeiten);
+        return r;
     }
 
+    private void bearbeiteFeld(Historieneintrag e, String feld) {
+        String neuerWert = "";
+        if (feld.equals(HEStreckentyp)) {
+            // TODO: Ausgabe durch Historieneintrag generieren
+            navUeberschrift("Streckentyp");
+            menuEintrag("0", "Unbekannt");
+            menuEintrag("1", "Stadt");
+            menuEintrag("2", "Land");
+        }
+        if (feld.equals(HEFahrzeug)) {
+            navUeberschrift("Fahrzeug auswaehlen");
+            menuEintrag("0", "Fahrzeug 0");
+            menuEintrag(" ", "...");
+            menuEintrag("9", "Fahrzeug 9");
+        }
+        
+        neuerWert = eingabe("Neuer Wert = ");
+        if (feld.equals(HEStrecke)) e.setzeStrecke(string2Float(neuerWert));
+        if (feld.equals(HEKraftstoff)) e.setzeKraftstoff(string2Float(neuerWert));
+        if (feld.equals(HEDatum)) if (e.gueltigesDatum(neuerWert)) e.setzeDatum(neuerWert);        
+        if (feld.equals(HEPreis)) e.setzePreis(string2Float(neuerWert));
+        if (feld.equals(HEFahrzeug)) e.setzeFahrzeug(string2Int(neuerWert));
+        if (feld.equals(HEStreckentyp)) e.setzeStreckentyp(string2Int(neuerWert));
+    }
+    
     public void menuHE1(String taste, int feld, Historieneintrag e) {
 	menuEintrag(taste, "Wert fuer " + Historieneintrag.feldNamen[feld] +
 		    " aendern (" + e.feld(feld) + ")");

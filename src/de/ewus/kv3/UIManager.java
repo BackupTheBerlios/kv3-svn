@@ -96,6 +96,22 @@ public abstract class UIManager {
      */
     abstract HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e);
 
+    protected int string2Int(String fs) {
+        int i = 0;
+        try {
+            i = Integer.parseInt(fs);
+        } catch (NumberFormatException e) {}
+        return i;
+    }
+    
+    protected float string2Float(String fs) {
+        float f = 0;
+        try {
+            f = Float.parseFloat(fs);
+        } catch (NumberFormatException e) {}
+        return f;
+    }
+    
     protected String werteBereitstellen(String streckeS, String kraftstoffS) {
         boolean werteIO = false;
 	String r = "";
