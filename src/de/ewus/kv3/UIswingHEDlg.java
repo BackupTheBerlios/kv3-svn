@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
+import java.text.SimpleDateFormat;
 
 public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
 {
@@ -146,12 +147,71 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         */
 	} // -- Constructor
 
+    /*private void holeDatenAusFeldern() {
+        StringBuffer sb = new StringBuffer("");
+        String trenner = e.trenner;
+        sb.append(tfStrecke.getText()); sb.append(e.trenner);
+        sb.append(tfKraftstoff.getText()); sb.append(e.trenner);
+        sb.append(tfPreis.getText()); sb.append(e.trenner);
+        sb.append(cbFahrzeug.getSelectedIndex()); sb.append(e.trenner);
+        sb.append(cbStreckentyp.getSelectedItem()); sb.append(e.trenner);
+        sb.append(tfDatum.getText());
+        e = new Historieneintrag(sb.toString());
+    }*/
+    
+    /**
+     *  Die Methode prüft, ob die übergebene Zeichenkette eine float-Zahl darstellt.
+     *
+     *  @param text     Die Zeichenkette, die geprüft werden soll
+     *  @return         wahr, wenn beim Umwandeln kein Fehler auftrat
+     */
+    private boolean kannUmwandeln(String text) {
+        boolean r = false;
+        try {
+            float f = Float.valueOf(text);
+            r = true;
+        } catch (NumberFormatException e) {}
+        return r;
+    }
+    
+    
+    private boolean validiereEingaben() {
+        boolean r = false;
+        r = kannUmwandeln(tfStrecke.getText());
+        if (!r) {System.err.println("Umwandeln mit Fehler: Strecke");}
+        r = r && kannUmwandeln(tfKraftstoff.getText());
+        if (!r) {System.err.println("Umwandeln mit Fehler: Kraftstoff");}
+        r = r && kannUmwandeln(tfPreis.getText());
+        if (!r) {System.err.println("Umwandeln mit Fehler: Preis");}
+        r = r && e.gueltigesDatum(tfDatum.getText());
+        if (!r) {System.err.println("Umwandeln mit Fehler: Datum");}
+        return r;
+    }
+    
+    private float toFloat(String f) {
+        float r = 0.0f;
+        try { r = Float.valueOf(f); } catch (NumberFormatException e) {};
+        return r;
+    }
+    
+    private void neueWerteFuerE() {
+        e.setzeStrecke(toFloat(tfStrecke.getText()));
+        e.setzeKraftstoff(toFloat(tfKraftstoff.getText()));
+        e.setzePreis(toFloat(tfPreis.getText()));
+        e.setzeFahrzeug(cbFahrzeug.getSelectedIndex());
+        e.setzeStreckentyp(cbStreckentyp.getSelectedIndex());
+        e.setzeDatum(tfDatum.getText());
+    }
+    
     public void actionPerformed(ActionEvent av) {
         String cmd = av.getActionCommand();
         boolean visible = true;
         if (cmd.equals("OK")) {
-            this.ergebnis = UIManager.HEDlgErgebnis.OK;
-            visible = false;
+            if (validiereEingaben()) {
+                neueWerteFuerE();
+                this.ergebnis = UIManager.HEDlgErgebnis.OK;
+                visible = false;
+            }
         }
         if (cmd.equals("Abbrechen")) {
             this.ergebnis = UIManager.HEDlgErgebnis.Abbrechen;
@@ -164,6 +224,6 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         if (!visible) setVisible(false);
     }
 
-    
+    public Historieneintrag holeHistorieneintrag() { return e; }
 } // -- end class UIswingHEDlg
 
