@@ -124,21 +124,30 @@ public class UIconsole extends UIManager
     }
 
     private void dumpHistorie() {
-	Historie h = kleber.holeHistorie();
-	int maxCol = h.getColumnCount();
-	System.out.print(TextGruen);
-	for (int col = 0 ; col < maxCol ; col++) {
-	    System.out.print(h.getColumnName(col) + "\t");
-	}
-	System.out.println(TextNormal);
-	for (int row = 0 ; row < h.getRowCount() ; row++) {
-	    System.out.print(TextGruen + row + TextNormal + " ");
-	    for (int col = 0 ; col < maxCol ; col++) {		
-		System.out.print(h.getValueAt(row, col));
-		System.out.print("\t");
-	    }
-	    System.out.println();
-	}	
+        Historie h = kleber.holeHistorie();
+        int maxCol = h.getColumnCount();
+        System.out.print(TextGruen);
+        for (int col = 0 ; col < maxCol ; col++) {
+            System.out.print(h.getColumnName(col) + "\t");
+        }
+        System.out.println(TextNormal);
+        for (int row = 0 ; row < h.getRowCount() ; row++) {
+            System.out.print(TextGruen + row + TextNormal + " ");
+            for (int col = 0 ; col < maxCol ; col++) {		
+            System.out.print(h.getValueAt(row, col));
+            System.out.print("\t");
+            }
+            System.out.println();
+        }
+        System.out.println(TextGruen + "Durschnittswerte");
+        System.out.print(TextNormal + "Kraftstoff je 100 km: ");
+        System.out.println(h.durchschnittStr2(Historieneintrag.KRAFTSTOFF100));
+        System.out.print("Strecke je Liter: ");
+        System.out.println(h.durchschnittStr2(Historieneintrag.STRECKEJELITER));
+        System.out.println("Preis: " + h.durchschnittStr3(Historieneintrag.PREIS));
+        
+        System.out.println("Gesamtstrecke: " + h.summeStr2(Historieneintrag.STRECKE));
+        System.out.println("Gesamtkraftstoff: " + h.summeStr2(Historieneintrag.KRAFTSTOFF));
     }
 
     private void menuHistorie() {

@@ -18,7 +18,6 @@
 
 package de.ewus.kv3; 
 
-import java.util.Vector;
 import java.io.*;
 import javax.swing.table.AbstractTableModel;
 
@@ -41,13 +40,16 @@ public class Historie extends javax.swing.table.AbstractTableModel {
             COLNUM = propPrefix + "ColNum",
             COLINH = propPrefix + "ColInhalt";
 
-    private Vector<Historieneintrag> historie;
+    private VectorExtended<Historieneintrag> historie;
+    
+    private Zahlenformatierer zf = new Zahlenformatierer();
+    
     /**
      * Erzeugt die Historien-Klasse und liest Voreinstellungen aus den Properties.
      * @param kleber Die Kleber-Klasse zur Verbindung aller Hilfsklassen.
      */
     public Historie(Kleber kleber) {
-	historie = new Vector<Historieneintrag>();
+	historie = new VectorExtended<Historieneintrag>();
         this.kleber = kleber;
         //Hole Einstellungen Anzahl der Spalten
         if (kleber.getProperty(this.COLNUM) != null) {
@@ -64,6 +66,101 @@ public class Historie extends javax.swing.table.AbstractTableModel {
 	
     }
 
+    /**
+     * Die Methode berechnet die Summe eines Datenfeldes aller Historieneinträge.
+     * 
+     * Gibt das Datenfeld an, dessen Werte summiert werden sollen.
+     * Gültige Werte sind:
+     * <ul>
+     * <li>Historieneintrag.STRECKE</li>
+     * <li>Historieneintrag.KRAFTSTOFF</li>
+     * <ul>
+     * @see Historieneintrag
+     * @param feld Das zu summierende Datenfeld
+     * @return Die Summe
+     */
+    public float summe(int feld) {
+        return historie.summe(feld);        
+    }
+    
+    /**
+     * Die Methode liefert das Ergebnis der Summen-Methode mit 2 Nachkommastellen.
+     * 
+     * Die Methode ruft die Methode summe() auf und 
+     * liefert einen mit 2 Nachkommastellen formatierten 
+     * String zurück
+     * @see #summe(int)
+     * @param feld Das zu summierende Datenfeld
+     * @return Die Summe
+     */
+    public String summeStr2(int feld) {
+        return zf.nf2nks.format(summe(feld));
+    }
+    
+    /**
+     * Die Methode liefert das Ergebnis der Summen-Methode mit 3 Nachkommastellen.
+     * 
+     * Die Methode ruft die Methode summe() auf und 
+     * liefert einen mit 3 Nachkommastellen formatierten 
+     * String zurück
+     * @see #summe(int)
+     * @param feld Das zu summierende Datenfeld
+     * @return Die Summe
+     */
+    public String summeStr3(int feld) {
+        return zf.nf3nks.format(summe(feld));
+    }
+    
+    /**
+     * Die Methode berechnet den Durchschnitt.
+     *
+     * Die Methode berechnet den Durchschnitt eines Datenfeldes aller Historieneinträge
+     * Gültige Werte sind:
+     * <ul>
+     * <li>Historieneintrag.STRECKEJELITER</li>
+     * <li>Historieneintrag.KRAFTSTOFF100</li>
+     * <ul>
+     * @see Historieneintrag
+     *
+     * @param feld Das Feld, dessen Durschnitt ermittelt werden soll
+     * @return Der Durchschnitt
+     */
+    public float durchschnitt(int feld) {
+        float r = 0.0f;
+        if (feld == Historieneintrag.STRECKEJELITER) r = summe(Historieneintrag.STRECKE) / summe(Historieneintrag.KRAFTSTOFF);
+        if (feld == Historieneintrag.KRAFTSTOFF100) r = 100 * summe(Historieneintrag.KRAFTSTOFF) / summe(Historieneintrag.STRECKE);
+        if (feld == Historieneintrag.PREIS) r = summe(Historieneintrag.PREIS) / summe(Historieneintrag.KRAFTSTOFF);
+        return r;
+    }
+    
+   /**
+     * Die Methode liefert das Ergebnis der Durchschnitt-Methode mit 2 Nachkommastellen.
+     * 
+     * Die Methode ruft die Methode durchschnitt() auf und 
+     * liefert einen mit 2 Nachkommastellen formatierten 
+     * String zurück
+     * @see #durchschnitt(int)
+     * @param feld Das Feld, dessen Durschnitt ermittelt werden soll
+     * @return Der Durchschnitt
+     */
+    public String durchschnittStr2(int feld) {
+        return zf.nf2nks.format(durchschnitt(feld));
+    }
+    
+   /**
+     * Die Methode liefert das Ergebnis der Durchschnitt-Methode mit 3 Nachkommastellen.
+     * 
+     * Die Methode ruft die Methode durchschnitt() auf und 
+     * liefert einen mit 3 Nachkommastellen formatierten 
+     * String zurück
+     * @see #durchschnitt(int)
+     * @param feld Das Feld, dessen Durschnitt ermittelt werden soll
+     * @return Der Durchschnitt
+     */
+    public String durchschnittStr3(int feld) {
+        return zf.nf3nks.format(durchschnitt(feld));
+    }
+    
     /**
      *  Wird beim Beenden der Anwendung aufgerufen, um die Einstellungen zu speichern.
      */

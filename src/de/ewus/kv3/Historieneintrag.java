@@ -20,7 +20,6 @@ package de.ewus.kv3;
 
 import java.util.*;
 import java.text.*;
-import java.text.NumberFormat;
 
 /**
  * Diese Klasse dient zur Speicherung historischer Daten.
@@ -28,7 +27,7 @@ import java.text.NumberFormat;
  * @author     Erik Wegner
  * @version    3.0
  */
-public class Historieneintrag {
+public class Historieneintrag extends Zahlenformatierer {
     /**
      * Definiert die Zustände für Streckentyp
      */
@@ -112,20 +111,6 @@ public class Historieneintrag {
          */
         PREIS = 7;
 
-    private NumberFormat 
-        /** Formatierung auf 2 Stellen */ 
-        nf2nks, //_N_ach_K_omma_S_tellen
-        /** Formatierung auf 3 Stelle */
-        nf3nks;
-
-    private void initNF() {
-	this.nf2nks = NumberFormat.getInstance();
-	this.nf2nks.setMaximumFractionDigits(2);
-        //this.nf.setMinimumFractionDigits(2);
-        this.nf3nks = NumberFormat.getInstance();
-        this.nf3nks.setMaximumFractionDigits(3);
-    }
-
     /**
      * Die Methode erzeugt eine identische Kopie dieses Historieneintrags.
      * @return Eine Kopie des Historieneintrags.
@@ -140,9 +125,9 @@ public class Historieneintrag {
      * @param kraftstoff Der verbrauchte Kraftstoff
      */
     public Historieneintrag(float strecke, float kraftstoff) {
+        super();
         setzeStrecke(strecke);
-        setzeKraftstoff(kraftstoff);
-	initNF();
+        setzeKraftstoff(kraftstoff);        
     }
     
     /**
@@ -150,6 +135,7 @@ public class Historieneintrag {
      * @param serial Die Darstellung des Historieneintrags als Zeichenkette
      */
     public Historieneintrag(String serial) {
+        super();
         String[] teile = serial.split(",");
         int c1 = 0;
         try { setzeStrecke(Float.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
@@ -158,7 +144,6 @@ public class Historieneintrag {
         try { setzeFahrzeug(Integer.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
         setzeStreckentyp(teile[c1++]);
         try { setzeDatum(teile[c1++]); } catch (NumberFormatException e) {}
-	initNF();
     }
     
     /**

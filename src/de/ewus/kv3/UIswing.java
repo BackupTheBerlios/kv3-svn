@@ -35,6 +35,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
     private JFrame frame;  //Das Fenster
     private JLabel lStrecke, lKraftstoff, //Labels mit wechselnder Hintergrundfarbe
         lErgebnis;
+    private JTextArea aSummen = new JTextArea();
     private JTextField tfStrecke, tfKraftstoff; //Textfelder für Eingabe
     private JTable histTable; //Tabelle der Historie
     private JComboBox 
@@ -84,6 +85,22 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
     private void lies_UI_Einstellung_Modus() {
         ge.zeichneLinie = cb_modus.getSelectedIndex() != 0;
         ge.zeichnePunkte = cb_modus.getSelectedIndex() != 1;
+    }
+
+    private void zeige_UI_Gesamtdurchschnitt() {
+        StringBuffer s = new StringBuffer("");
+        Historie h = kleber.holeHistorie();
+        s.append("Gesamtstrecke ");
+        s.append(h.summeStr2(Historieneintrag.STRECKE));
+        s.append("km, Gesamtkraftstoff ");
+        s.append(h.summeStr2(Historieneintrag.KRAFTSTOFF));
+        s.append("l, durchschn. Verbrauch ");
+        s.append(h.durchschnittStr2(Historieneintrag.KRAFTSTOFF100));
+        s.append("l/100km, durchschn. ");
+        s.append(h.durchschnittStr2(Historieneintrag.STRECKEJELITER));
+        s.append("km/l, durchschn. Preis ");
+        s.append(h.durchschnittStr3(Historieneintrag.PREIS));
+        aSummen.setText(s.toString());
     }
     
     public void componentHidden(ComponentEvent e) {
@@ -210,6 +227,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      */
     public void valueChanged(ListSelectionEvent e) {
         historieEintragBearbeiten(histTable.getSelectedRow());
+        this.zeige_UI_Gesamtdurchschnitt();
     }
     
     public void dispose() {
@@ -336,7 +354,11 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      */
     private void addUIElements(JFrame frame) {
         Font f, f2;
+        //*****************************************
+        //
         //Seite Eingabe
+        //
+        //*****************************************
         String[] tasten = {
                 "l/km", "7", "8", "9",
                 "+Hist", "4", "5", "6",
@@ -424,14 +446,21 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         }
         p1.add(p12, BorderLayout.CENTER);
 
+        //*****************************************
+        //
         //Seite Historie
+        //
+        //*****************************************
         JPanel p2 = new JPanel(new BorderLayout());
         histTable = new JTable(kleber.holeHistorie());
         histTable.getSelectionModel().addListSelectionListener( this );
         //JList liste = new JList();
         JScrollPane lsp = new JScrollPane(histTable);
         p2.add(lsp, BorderLayout.CENTER);
-        p2.add(new JLabel("Gesamtdurchschnitt"), BorderLayout.SOUTH);
+        p2.add(aSummen, BorderLayout.SOUTH);
+        aSummen.setWrapStyleWord(true);
+        aSummen.setLineWrap(true);
+        zeige_UI_Gesamtdurchschnitt();
         //Seite Grafik
         JTabbedPane gfxPane = new JTabbedPane(JTabbedPane.BOTTOM);
         f = gfxPane.getFont();
@@ -494,7 +523,11 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         p31.add(drehliste, cr); cr.gridy++;
         p31.add(new JLabel("Profile"), cl); cl.gridy++;
         p31.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;
+        //*****************************************
+        //
         //Seite Grafik, Punkte
+        //
+        //*****************************************
         cl.gridy = cr.gridy = 0;
         p32.add(new JLabel("Farbe Achsen"), cl); cl.gridy++;
         p32.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;
@@ -514,7 +547,11 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         p32.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;
         p32.add(new JLabel("Vorschau"), cl); cl.gridy++;
         p32.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;        
+        //*****************************************
+        //
         //Seite Info
+        //
+        //*****************************************
         JEditorPane infoarea = new JEditorPane();
         JScrollPane spia = new JScrollPane(infoarea,
                     JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,

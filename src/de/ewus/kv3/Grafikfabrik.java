@@ -176,7 +176,7 @@ public class Grafikfabrik implements Runnable
             mulx = (ge.breite - 2 * ge.rahmenx - 3) / maxPunkt.x,
             muly = (ge.hoehe - 2 * ge.rahmeny - 3) / maxPunkt.y;            
         int x,y, vorx = 0, vory = 0;
-        System.out.println("MaxPunkt " + maxPunkt.x + ", " + maxPunkt.y);
+        //System.out.println("MaxPunkt " + maxPunkt.x + ", " + maxPunkt.y);
         GfxPunkt punkt;
     
         for(int c2 = 0; c2 < anzahlPunkte; c2++) {
