@@ -143,6 +143,7 @@ public class Kleber {
     private void liesProperties() {
         //In welchem Format legen wir die Konfiguration ab?
         boolean useXMLcfg = true; //Standard ist XML
+        // QUESTION: Kann vielleicht nach einem fehlgeschlagenen Laden von XML-Parametern ein Laden als TXT versucht werden?
         String cfgDatei = "", cfgFormat = "";
         if (opt.getSet().isSet(CFGDATEI)) cfgDatei = opt.getSet().getOption(CFGDATEI).getResultValue(0);
         
@@ -197,6 +198,8 @@ public class Kleber {
     
     private void schreibProperties() {
         boolean useXMLcfg = true; //Standard ist XML
+        useXMLcfg = !properties.getProperty(CFGFORMAT).equalsIgnoreCase("TXT");
+        
         String cfgDatei = "", cfgFormat = "";
         cfgDatei = properties.getProperty(CFGDATEI);
         cfgFormat = properties.getProperty(CFGFORMAT);
