@@ -30,7 +30,7 @@ import java.io.*;
  */
 public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener {
     private JFrame frame;  //Das Fenster
-    private JLabel lStrecke, lKraftstoff, //Label mit wechselnder Hintergrundfarbe
+    private JLabel lStrecke, lKraftstoff, //Labels mit wechselnder Hintergrundfarbe
         lErgebnis;
     private JTextField tfStrecke, tfKraftstoff; //Textfelder für Eingabe
     
@@ -142,14 +142,12 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         } catch (NumberFormatException e) {
             System.err.println(e);
         }
-        System.out.println("Strecke=" + strecke + ", Kraftstoff=" + kraftstoff);
+        //System.out.println("Strecke=" + strecke + ", Kraftstoff=" + kraftstoff);
         if (werteIO) {
             neueWerte();
-            //System.out.println("Verbrauch100km="+ver100);
-            //System.out.println("StreckeJeLiter="+strLtr);
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
-            pw.printf("Verbrauch: %1.2f, Strecke je Liter %1.2f\n", ver100, strLtr);
+            pw.printf("Verbrauch %1.2f l/100km,\n Strecke je Liter %1.2f", ver100, strLtr);            
             lErgebnis.setText(sw.toString());
         }
     }
@@ -167,8 +165,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      *  Description of the Method
      */
     public void startUI() {
-        javax.swing.SwingUtilities.invokeLater(this);
-        neueWerte();
+        javax.swing.SwingUtilities.invokeLater(this);        
     }
 
 
@@ -213,12 +210,8 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         }
         sb.append(taste);
         String sbp = ""; int c1 = 0;
-        System.out.println("sb.length()=" + sb.length());
         boolean benutzesbp = false;
         do {
-            System.out.println("c1=" + c1);
-            System.out.println("sbp=" + sbp);
-            
             try {
                 if (sb.length() > 0)
                     sbp = (new Float(sb.substring(0, sb.length() - c1))).toString();                    
@@ -240,7 +233,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      */
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        System.out.println(command);
+        //System.out.println(command);
         if (command.equals("l/km")) naechstesFeldAktivieren();
         if (command.matches("[0-9,]")) zahlentaste(command);
         if (command.equals("E")) {tfInhaltLoeschen = true; naechstesFeldAktivieren();}
@@ -259,6 +252,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      * @param  frame  The feature to be added to the UIElements attribute
      */
     private void addUIElements(JFrame frame) {
+        Font f, f2;
         //Seite Eingabe
         String[] tasten = {
                 "l/km", "7", "8", "9",
@@ -309,13 +303,16 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         c.weightx = 1.0;
         c.gridwidth = 2;
         lErgebnis = new JLabel("Ergebnis der Berechnung");
+        f = lErgebnis.getFont();
+        f2 = new Font(f.getName(), Font.PLAIN, f.getSize() - 1);
+        lErgebnis.setFont(f2);
         p11.add(lErgebnis, c);
         p1.add(p11, BorderLayout.NORTH);
         //Tastenfelder
         JPanel p12 = new JPanel(new GridLayout(4, 4));
         JButton b;
-        Font f = p12.getFont();
-        Font f2 = new Font(f.getName(), Font.BOLD, f.getSize() * 2);
+        f = p12.getFont();
+        f2 = new Font(f.getName(), Font.BOLD, f.getSize() * 2);
         for (int c1 = 0; c1 < tasten.length; c1++) {
             // TODO: Tab-Taste deaktivieren
             b = new JButton(tasten[c1]);

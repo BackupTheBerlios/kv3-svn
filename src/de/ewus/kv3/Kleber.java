@@ -32,7 +32,7 @@ public class Kleber {
      *  Oberfläche neue Werte zur Berechnung bereitstehen.
      */
     public void neueWerte(float strecke, float kraftstoff) {
-        System.out.println("Neue Werte");
+        //System.out.println("Neue Werte");
         ui.setzeVerbrauch100km(kraftstoff*100/strecke);
         ui.setzeStreckeJeLiter(strecke/kraftstoff);
     }

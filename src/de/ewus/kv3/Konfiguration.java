@@ -6,12 +6,8 @@ import java.io.*;
 /**
  * Die Klasse Konfiguration speichert Einstellungen der Anwendung.
  * 
- * <p>Einstellungen werden in einer baumartigen Struktur gespeichert,
- * sodass sich jeder Wert über eine Kategorie und ein Schlüsselwort definiert.
- * Eine Kategorie fasst mehrere Schlüsselworte zusammen.</p>
- * 
- * <p>Die Kategorie "GLOBAL" ist immer existent und enthält alle Schlüsselworte,
- * die keiner konkreten Kategorie zugeordnet wurden.</p>
+ * <p>Einstellungen werden in einer flachen Struktur gespeichert,
+ * jeder Wert ist über ein Schlüsselwort definiert.</p>
  * 
  * @author Erik Wegner
  * @version 1.0
@@ -19,7 +15,6 @@ import java.io.*;
 public class Konfiguration
 {
     private String datei;
-    private HashMap<String,HashMap<String,String>> kategorien;
     private HashMap<String,String> schluessel;
     private final String GLOBAL = "GLOBAL";
     private final String TRENNER = "=";
@@ -42,26 +37,9 @@ public class Konfiguration
      */
     public void init()
     {
-        kategorien = new HashMap<String,HashMap<String,String>>();
-        this.setzeKategorie(this.GLOBAL);
+        this.schluessel = new HashMap<String,String>();        
     }
     
-    /**
-     * Die Methode setzt die für alle nachfolgenden Operationen gültige 
-     * Kategorie.
-     *
-     * @param  kategorie   Die Kategorie
-     */
-    public void setzeKategorie(String kategorie)
-    {
-        if (kategorie.equals("")) kategorie = this.GLOBAL;
-        if ( this.kategorien.containsKey(kategorie) ) {
-            schluessel = this.kategorien.get(kategorie);
-        } else {
-            schluessel = new HashMap<String,String>();
-            this.kategorien.put(kategorie, schluessel);
-        }
-    }
     
     /**
      * Diese Methode setzt in der aktuellen Kategorie den Wert für
@@ -72,7 +50,7 @@ public class Konfiguration
      */
     public void setzeWert(String schluesselwort, String wert)
     {
-        schluessel.put(schluesselwort, wert);
+        this.schluessel.put(schluesselwort, wert);
     }
     
     /**
@@ -102,15 +80,10 @@ public class Konfiguration
             BufferedReader br = new BufferedReader(new FileReader(this.datei));
             int z1 = this.str2int(br.readLine());
             while (z1 > 0) {
-                this.setzeKategorie(br.readLine());
-                int z2 = this.str2int(br.readLine());
-                while (z2 > 0) {
-                    zeile = br.readLine();
-                    zeilenteile = zeile.split(this.TRENNER,2);
-                    if (zeilenteile.length > 1) 
-                        this.setzeWert(zeilenteile[0], zeilenteile[1]);
-                    z2--;
-                }
+                zeile = br.readLine();
+                zeilenteile = zeile.split(this.TRENNER,2);
+                if (zeilenteile.length > 1) 
+                    this.setzeWert(zeilenteile[0], zeilenteile[1]);                    
                 z1--;
             }
         }
@@ -142,22 +115,13 @@ public class Konfiguration
         try {
             FileOutputStream out = new FileOutputStream(this.datei);
             PrintWriter pw = new PrintWriter(out);
-            //Anzahl Kategorien
-            pw.println(kategorien.size());
-            Set<String> kset = kategorien.keySet();
-            HashMap<String,String> speicherhash;
-            for (String kategorie : kset) {
-                //Kategoriename
-                pw.println(kategorie);
-                speicherhash = kategorien.get(kategorie);
-                //Anzahl Schlüsselwörter
-                pw.println(speicherhash.size());
-                Set<String> shset = speicherhash.keySet();
-                for (String schluesselwort : shset) {
-                    //Schlüsselwort = Wert
-                    pw.println(schluesselwort + this.TRENNER + 
-                        speicherhash.get(schluesselwort));
-                }
+            //Anzahl Schlüsselworte
+            pw.println(schluessel.size());
+            Set<String> kschluessel = schluessel.keySet();
+            for (String schluesselwort : kschluessel) {
+                //Schlüsselwort = Wert
+                pw.println(schluesselwort + this.TRENNER + 
+                    holeWert(schluesselwort));
             }
             pw.close();
             erfolg = true;
