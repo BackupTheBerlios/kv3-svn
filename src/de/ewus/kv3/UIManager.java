@@ -46,6 +46,10 @@ public abstract class UIManager {
         kleber.historieNeueWerte(strecke, kraftstoff);
     }
     
+    protected void historieEintragBearbeiten(int eintragnr) {
+        kleber.historieEintragBearbeiten(eintragnr);
+    }
+    
     /**
      *  Teilt Kleber mit, dass neue Werte zur Berechnung vorliegen.
      */

@@ -91,10 +91,19 @@ public class Historie extends javax.swing.table.AbstractTableModel {
     
     public int size() { return this.historie.size();}
     
-    public Historieneintrag eintragNr(int nummer) {
+    public Historieneintrag holeEintragNr(int nummer) {
         return historie.elementAt(nummer);
     }
 
+    public void setzeEintragNr(int nummer, Historieneintrag e) {
+        historie.setElementAt(e, nummer);
+    }
+    
+    public void loescheEintrag(int nummer) {
+        historie.removeElementAt(nummer);
+        neueWerte();
+    }
+    
     /**
      *  Wandelt eine Zeichenkette in Integer
      *
@@ -138,7 +147,7 @@ public class Historie extends javax.swing.table.AbstractTableModel {
      * @return         The valueAt value
      */
     public Object getValueAt(int row, int column) {
-        Historieneintrag e = eintragNr(row);
+        Historieneintrag e = holeEintragNr(row);
 	return e.feld(columnInhalt[column]);
     }
 

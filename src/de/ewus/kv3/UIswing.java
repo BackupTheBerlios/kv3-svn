@@ -1,5 +1,6 @@
 package de.ewus.kv3;
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -28,11 +29,12 @@ import java.net.URL;
  * @created    1. Oktober 2004
  * @version    1.0
  */
-public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener {
+public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, ListSelectionListener {
     private JFrame frame;  //Das Fenster
     private JLabel lStrecke, lKraftstoff, //Labels mit wechselnder Hintergrundfarbe
         lErgebnis;
     private JTextField tfStrecke, tfKraftstoff; //Textfelder für Eingabe
+    private JTable histTable; //Tabelle der Historie
     
     private enum felder {Kraftstoff, Strecke};
     private felder aktivesFeld = felder.Kraftstoff;
@@ -117,7 +119,17 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         quitApp();
     }
 
-
+    /*
+    public void mousePressed(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    */
+    
+    public void valueChanged(ListSelectionEvent e) {
+        historieEintragBearbeiten(histTable.getSelectedRow());
+    }
+    
     public void dispose() {
         frame.dispose();
     }
@@ -332,9 +344,10 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
 
         //Seite Historie
         JPanel p2 = new JPanel(new BorderLayout());
-        JTable table = new JTable(kleber.holeHistorie());
+        histTable = new JTable(kleber.holeHistorie());
+        histTable.getSelectionModel().addListSelectionListener( this );
         //JList liste = new JList();
-        JScrollPane lsp = new JScrollPane(table);
+        JScrollPane lsp = new JScrollPane(histTable);
         p2.add(lsp, BorderLayout.CENTER);
         p2.add(new JLabel("Gesamtdurchschnitt"), BorderLayout.SOUTH);
         //Seite Grafik

@@ -30,7 +30,8 @@ public class UIconsole extends UIManager
 	HEStreckentyp = "t",
     HEOK = "o!",
     HEAbbrechen = "a!",
-    HELoeschen = "l!";
+    HELoeschen = "l!",
+    HBearbeiten = "a";
 
     private BufferedReader br;
     private boolean eingabeOK = false;
@@ -123,7 +124,12 @@ public class UIconsole extends UIManager
 
     private void menuHistorie() {
         navUeberschrift("Historie");
-        dumpHistorie();        
+        dumpHistorie();
+        menuEintrag(HBearbeiten, "Eintrag zur Bearbeitung anzeigen");
+        if (eingabe().equals(HBearbeiten)) {
+            int eintragnr = string2Int(eingabe("Nummer des Eintrags = "));
+            historieEintragBearbeiten(eintragnr);
+        }
     }
 
     private void menuRechnen() {

@@ -43,6 +43,10 @@ public class Historieneintrag {
 	this.nf = NumberFormat.getInstance();
 	this.nf.setMaximumFractionDigits(2);
     }
+
+    public Historieneintrag clone() {
+        return new Historieneintrag(this.toString());
+    }
     
     public Historieneintrag(float strecke, float kraftstoff) {
         setzeStrecke(strecke);

@@ -43,7 +43,7 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         c.gridx = 1; c.gridy = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        tfStrecke = new JTextField(Float.toString(e.holeStrecke()));
+        tfStrecke = new JTextField(e.feld(e.STRECKE));
         p1.add(tfStrecke, c);
         //------------------------------------
         c.anchor = GridBagConstraints.LINE_START;
@@ -55,7 +55,7 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         c.gridx = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        tfKraftstoff = new JTextField(Float.toString(e.holeKraftstoff()));
+        tfKraftstoff = new JTextField(e.feld(e.KRAFTSTOFF));
         p1.add(tfKraftstoff, c);
         //------------------------------------
         c.anchor = GridBagConstraints.LINE_START;
@@ -67,7 +67,7 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         c.gridx = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        tfDatum = new JTextField(e.holeDatum());
+        tfDatum = new JTextField(e.feld(e.DATUM));
         p1.add(tfDatum, c);
         //------------------------------------
         c.anchor = GridBagConstraints.LINE_START;
@@ -79,7 +79,7 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         c.gridx = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        tfPreis = new JTextField();
+        tfPreis = new JTextField(e.feld(e.PREIS));
         p1.add(tfPreis, c);
         //------------------------------------
         c.anchor = GridBagConstraints.LINE_START;

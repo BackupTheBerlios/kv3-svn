@@ -51,6 +51,19 @@ public class Kleber {
     }
 
     
+    public void historieEintragBearbeiten(int eintragnr) {
+        if (eintragnr >= 0 && eintragnr < holeHistorie().size()) {
+            Historieneintrag e = historie.holeEintragNr(eintragnr);
+            Historieneintrag e2 = e.clone();
+            UIManager.HEDlgErgebnis ergebnis = ui.bearbeiteHistorieneintrag(e2);
+            switch (ergebnis) {
+                case OK : historie.setzeEintragNr(eintragnr, e2); break;
+                case Abbrechen : break;
+                case Loeschen : historie.loescheEintrag(eintragnr); break;
+            }
+        }
+    }
+    
     public void historieNeueWerte(float strecke, float kraftstoff) {
         Historieneintrag e = new Historieneintrag(strecke, kraftstoff);
         UIManager.HEDlgErgebnis ergebnis = ui.bearbeiteHistorieneintrag(e);
