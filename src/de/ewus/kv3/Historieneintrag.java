@@ -46,7 +46,7 @@ public class Historieneintrag {
     public float        holeVerbrauch100km() {return kraftstoff*100/strecke;}
     public float        holeStreckeJeLiter() {return strecke/kraftstoff; }
     
-	public float        holeStrecke()     { return this.strecke;     }
+    public float        holeStrecke()     { return this.strecke;     }
     public float        holeKraftstoff()  { return this.kraftstoff;  }
     public float        holePreis()       { return this.preis;       }
     public int          holeFahrzeug()    { return this.fahrzeug;    }
@@ -72,19 +72,19 @@ public class Historieneintrag {
         this.preis = preis;
     }
     
-	public void setzeDatum(Date datum) {
-		this.datum = datum;        
-	} // -- setzeDatum(Date datum)()
+    public void setzeDatum(Date datum) {
+	this.datum = datum;        
+    } // -- setzeDatum(Date datum)()
     
     
-	public void setzeFahrzeug(int fahrzeug) {
+    public void setzeFahrzeug(int fahrzeug) {
         if (fahrzeug < maxFahrzeug) this.fahrzeug = fahrzeug;
-	} // -- setzeFahrzeug(int Fahrzeug)()
+    } // -- setzeFahrzeug(int Fahrzeug)()
     
     
-	public void setzeStreckentyp(Streckentyp streckentyp) {
-		this.streckentyp = streckentyp;
-	} // -- setzeStreckentyp(Streckentyp streckentyp)()
+    public void setzeStreckentyp(Streckentyp streckentyp) {
+	this.streckentyp = streckentyp;
+    } // -- setzeStreckentyp(Streckentyp streckentyp)()
 
 
     public void setzeStreckentyp(String st) {

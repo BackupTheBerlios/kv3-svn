@@ -4,7 +4,6 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
-import java.io.*;
 
 /**
  * Eine Implementation des UIManagers mit einer Java SWING-Oberfläche.
@@ -135,22 +134,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
     }
     
     private void werteBereitstellen() {
-        boolean werteIO = false;
-        try {
-            strecke = Float.parseFloat(tfStrecke.getText());
-            kraftstoff = Float.parseFloat(tfKraftstoff.getText());
-            werteIO = true;
-        } catch (NumberFormatException e) {
-            System.err.println(e);
-        }
-        //System.out.println("Strecke=" + strecke + ", Kraftstoff=" + kraftstoff);
-        if (werteIO) {
-            neueWerte();
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            pw.printf("Verbrauch %1.2f l/100km,\n Strecke je Liter %1.2f", ver100, strLtr);            
-            lErgebnis.setText(sw.toString());
-        }
+	lErgebnis.setText(werteBereitstellen(tfStrecke.getText(), tfKraftstoff.getText()));
     }
     
     private void naechstesFeldAktivieren() {
@@ -348,7 +332,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
 
         //Seite Historie
         JPanel p2 = new JPanel(new BorderLayout());
-        JTable table = new JTable(k.holeHistorie());
+        JTable table = new JTable(kleber.holeHistorie());
         //JList liste = new JList();
         JScrollPane lsp = new JScrollPane(table);
         p2.add(lsp, BorderLayout.CENTER);
@@ -364,7 +348,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         JPanel p34 = new JPanel(new BorderLayout()); gfxPane.addTab("Grafik", p34);
         //Seite Grafik, Achsen
         JComboBox xliste = new JComboBox(); JComboBox yliste = new JComboBox();
-        GfxEinstellungen gfxe = this.k.holeGfxEinstellungen();
+        GfxEinstellungen gfxe = this.kleber.holeGfxEinstellungen();
         for (GfxEinstellungen.AchsenListe a : GfxEinstellungen.AchsenListe.values()) {
             xliste.addItem(a.bezeichnung());
             yliste.addItem(a.bezeichnung());

@@ -1,5 +1,5 @@
 package de.ewus.kv3;
-import java.lang.reflect.Method;
+import java.io.*;
 
 /**
  * Abstract class UIManager - write a description of the class here
@@ -21,7 +21,7 @@ public abstract class UIManager {
     /**
      *  Description of the Field
      */
-    protected Kleber k;
+    protected Kleber kleber;
 
 
     /**
@@ -29,8 +29,8 @@ public abstract class UIManager {
      *
      * @param  k  Description of the Parameter
      */
-    public void setzeKleber(Kleber k) {
-        this.k = k;
+    public void setzeKleber(Kleber kleber) {
+        this.kleber = kleber;
     }
 
 
@@ -43,14 +43,14 @@ public abstract class UIManager {
      *  Teilt  Kleber mit, dass neue Werte in die Historie übernommen werden soll
      */
     protected void historieNeueWerte() {
-        k.historieNeueWerte(strecke, kraftstoff);
+        kleber.historieNeueWerte(strecke, kraftstoff);
     }
     
     /**
      *  Teilt Kleber mit, dass neue Werte zur Berechnung vorliegen.
      */
     protected void neueWerte() {
-        k.neueWerte(strecke, kraftstoff);
+        kleber.neueWerte(strecke, kraftstoff);
     }
 
 
@@ -58,7 +58,7 @@ public abstract class UIManager {
      *  Teilt Kleber mit, dass die Anwendung beendet werden soll.
      */
     protected void quitApp() {
-        k.quitApp();
+        kleber.quitApp();
     }
 
 
@@ -77,11 +77,11 @@ public abstract class UIManager {
     
 
     protected String getProperty(String key) {
-        return k.getProperty(key);
+        return kleber.getProperty(key);
     }
     
     protected void setProperty(String key, String value) {
-        k.setProperty(key, value);
+        kleber.setProperty(key, value);
     }
 
     
@@ -95,5 +95,27 @@ public abstract class UIManager {
      *  @param e        Der zu bearbeitende Historieneintrag
      */
     abstract HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e);
+
+    protected String werteBereitstellen(String streckeS, String kraftstoffS) {
+        boolean werteIO = false;
+	String r = "";
+        try {
+            this.strecke = Float.parseFloat(streckeS);
+            this.kraftstoff = Float.parseFloat(kraftstoffS);
+            werteIO = true;
+        } catch (NumberFormatException e) {
+            System.err.println(e);
+        }
+        //System.out.println("Strecke=" + strecke + ", Kraftstoff=" + kraftstoff);
+        if (werteIO) {
+            neueWerte();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            pw.printf("Verbrauch %1.2f l/100km,\n Strecke je Liter %1.2f", ver100, strLtr);            
+            r = sw.toString();
+        }
+	return r;
+    }
+
 }
 

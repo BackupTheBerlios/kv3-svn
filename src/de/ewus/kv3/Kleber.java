@@ -77,11 +77,11 @@ public class Kleber {
      */
     private void createUI() {
         switch (this.targetui) {
-	    console : 
-		ui = new UIconsole();
+	case console : 
+	    ui = new UIconsole();
 	    break;
-            default:
-                ui = new UIswing();
+	default:
+	    ui = new UIswing();
         }
         ui.setzeKleber(this);
     }
@@ -144,7 +144,7 @@ public class Kleber {
             //if !properties.getValue("defaultui").equals("") setzeUI;
             String propDefUI = getProperty(DEFAULTUI);
             if (propDefUI != null) if (!propDefUI.equals("")) setzeUI(propDefUI);
-            
+            System.out.println(DEFAULTUI + " = " + propDefUI);
             
             //Setze Optionen aus der Kommandozeile
             // TODO: Setze Optionen aus der Kommandozeile

@@ -2,6 +2,7 @@ package de.ewus.kv3;
 
 import java.util.Vector;
 import java.io.*;
+import java.text.NumberFormat;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -38,6 +39,8 @@ public class Historie extends javax.swing.table.AbstractTableModel {
             COLNUM = propPrefix + "ColNum",
             COLINH = propPrefix + "ColInhalt";
 
+    private NumberFormat nf;
+
     private Vector<Historieneintrag> historie;
     /**
      * Constructor for objects of class Historie
@@ -45,6 +48,8 @@ public class Historie extends javax.swing.table.AbstractTableModel {
     public Historie(Kleber kleber) {
 	historie = new Vector<Historieneintrag>();
         this.kleber = kleber;
+	this.nf = NumberFormat.getInstance();
+	this.nf.setMaximumFractionDigits(2);
         //Hole Einstellungen Anzahl der Spalten
         if (kleber.getProperty(this.COLNUM) != null) {
             this.columnZahl = toInt(kleber.getProperty(this.COLNUM));
@@ -155,11 +160,12 @@ public class Historie extends javax.swing.table.AbstractTableModel {
     public Object getValueAt(int row, int column) {
         Historieneintrag e = eintragNr(row);
         String r = "";
+	
         switch (columnInhalt[column]) {
-            case STRECKE        : r = Float.toString(e.holeStrecke()); break;
-            case KRAFTSTOFF     : r = Float.toString(e.holeKraftstoff()); break;
-            case KRAFTSTOFF100  : r = Float.toString(e.holeVerbrauch100km()); break;
-            case STRECKEJELITER : r = Float.toString(e.holeStreckeJeLiter()); break;
+            case STRECKE        : r = nf.format(e.holeStrecke()); break;
+            case KRAFTSTOFF     : r = nf.format(e.holeKraftstoff()); break;
+            case KRAFTSTOFF100  : r = nf.format(e.holeVerbrauch100km()); break;
+            case STRECKEJELITER : r = nf.format(e.holeStreckeJeLiter()); break;
             case DATUM          : r = e.holeDatum(); break;
             case FAHRZEUG       : r = Integer.toString(e.holeFahrzeug()); break;
             case STRECKENTYP    : switch (e.holeStreckentyp()) {
