@@ -160,8 +160,36 @@ public class Kleber {
         if (cfgDatei.equals("")) cfgDatei = "kv3.cfg";
         File cfgFile = new File(cfgDatei);
         try {
-            if (!cfgFile.canRead()) fehler("Datei \"" + cfgDatei + "\" ist nicht lesbar.");
-        } catch (SecurityException e) { fehler(e.getMessage()); }
+            if (cfgFile.exists()) {
+                if (!cfgFile.canRead()) fehler("Datei \"" + cfgDatei + "\" ist nicht lesbar.");
+                else {
+                    FileInputStream in = new FileInputStream(cfgFile);
+                    if (useXMLcfg) properties.loadFromXML(in);
+                    else properties.load(in);
+                    in.close();
+                    //fehler("Datei geladen!");
+                }
+            }
+            // QUESTION: Sollte in properties der Wert für cfgDatei wieder auf den Variableninalt von cfgDatei gesetzt werden? Oder soll der Wert aus der Datei bleiben?
+        } 
+        catch (SecurityException e) { fehler(e.getMessage()); }
+        catch (IOException e) { 
+            cfgDatei = cfgDatei + ".fix";
+            fehler(e.getMessage());
+            fehler("Die Speicherung erfolgt in die Datei " + cfgDatei);
+        }
+        catch (IllegalArgumentException e) { 
+            cfgDatei = cfgDatei + ".fix";
+            fehler(e.getMessage());
+            fehler("Die Speicherung erfolgt in die Datei " + cfgDatei);
+        }
+        // QUESTION: Warum wird die Exception nicht geworfen?
+        /*catch (InvalidPropertiesFormatException e) { 
+            cfgDatei = cfgDatei + ".fix";
+            fehler(e.getMessage());
+            fehler("Die Speicherung erfolgt in die Datei " + cfgDatei);
+        }*/
+        catch (NullPointerException e) { fehler(e.getMessage()); }
         //Und wir merken uns unserer Konfigurationsdatei
         properties.setProperty(CFGDATEI, cfgDatei);
     }
@@ -181,7 +209,7 @@ public class Kleber {
             if (useXMLcfg) properties.storeToXML(out, comments);
             else properties.store(out, comments);
             out.close();
-            fehler("Datei gespeichert!");
+            //fehler("Datei gespeichert!");
         }
         catch (SecurityException e) { fehler(e.getMessage()); }
         catch (IOException e) { fehler(e.getMessage()); }
