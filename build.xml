@@ -7,35 +7,45 @@
 	<property name="src" value="src" />
 	<property name="classes" value="classes" />
 	<property name="doc" value="doc" />
-	<property name="klassenbasis" value="de.ewus" />
+	<property name="klassenbasis" value="de.ewus.kv3" />
+	<property name="SRCJAR" value="kv3_src.jar" />
+	<property name="BINJAR" value="kv3.jar" />
 	<target name="classes" description="Erstelle die Java-Klassen zur Ausführun">
+		<mkdir dir="${classes}"/>
 		<javac destdir="${classes}" srcdir="${src}" />
 	</target>
 	<target name="doc" description="Erstellt die Klassendokumentation mittels javadoc">
-		<javadoc destdir="${doc}" />
+		<javadoc destdir="${doc}" packagenames="${klassenbasis}" sourcepath="${src}" />
 	</target>
-	<target name="all" depends="classes,doc" description="Erstellt alles">
+	<target name="all" depends="jar,doc,srcjar" description="Erstellt alles">
 	</target>
 	<target name="clean" description="Entfernt die Java-Klassen und die erstellte Dokumentation">
 		<delete dir="${classes}" />
 		<delete dir="${doc}" />
+		<delete file="${BINJAR}" />
+		<delete file="${SRCJAR}" />
 	</target>
-	<target name="jar" description="Erstellt eine ausfÃ¼hrbare JAR-Datei" depends="classes">
-		<jar basedir="${classes}" destfile="kv3.jar">
+	<target name="jar" description="Erstellt eine ausführbare JAR-Datei" depends="classes">
+		<jar basedir="${classes}" destfile="${BINJAR}">
 			<manifest>
 				<attribute name="Build-By" value="Erik Wegner"/>
-				<attribute name="Main-class" value="de.ewus.kv3.Kleber"/>
+				<attribute name="Main-class" value="${klassenbasis}.Kleber"/>
 			</manifest>
 		</jar>
 	</target>
 	<target name="srcjar" description="Erstellt eine JAR-Datei mit den Quellen der Anwendung">
-		<jar basedir="${src}" destfile="kv3_src.jar">
+		<jar destfile="${SRCJAR}">
 			<manifest>
 				<attribute name="Build-By" value="Erik Wegner"/>
 			</manifest>
+			<fileset dir=".">
+				<include name="${src}/**"/>
+				<include name="ressourcen/**"/>
+				<include name="build.xml"/>
+			</fileset>						
 		</jar>
 	</target>
 	<target name="run" depends="jar" description="Führt die Anwendung aus">
-		<java jar="kv3.jar" fork="true"/>		
+		<java jar="${BINJAR}" fork="true"/>		
 	</target>
 </project>
