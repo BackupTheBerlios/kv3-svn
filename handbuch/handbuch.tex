@@ -1,0 +1,310 @@
+\documentclass[final,a4paper,twoside]{scrartcl}
+\usepackage{makeidx}
+%\usepackage{glosstex}
+\makeindex
+%\makeglossary
+\usepackage[headsepline,footsepline]{scrpage2}
+\usepackage{a4,ngerman}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphics}
+\usepackage{eso-pic}
+\usepackage[pdftex]{graphicx}
+\usepackage{url}
+\usepackage{ae}
+\usepackage{times}
+\usepackage{t1enc}
+\usepackage{marvosym}
+\usepackage{longtable}
+\usepackage{color}
+\usepackage{picins}
+\usepackage{fancyvrb} %für verbatiminput
+\usepackage[draft=false, pdftex, a4paper, bookmarks=true, bookmarksopen=true, bookmarksnumbered=true, pdfauthor={Erik Wegner}, pdftitle={Handbuch zur Anwendung Kraftstoffverbrauch 3}, colorlinks, linkcolor=blue, urlcolor=blue, pdfstartview=FitH, pdfpagemode=UseOutlines]{hyperref}
+
+%%Befehl für Wasserzeichen "Entwurf"
+\makeatletter
+\newcommand\BackgroundPicture[3]{%
+  \setlength{\unitlength}{1pt}%
+  \put(0,\strip@pt\paperheight){%
+    \parbox[t][\paperheight]{\paperwidth}{%
+      \vfill
+      \centering\includegraphics[width=#2,angle=#3,draft=false]{#1}
+      \vfill
+    }
+  }
+} %
+\makeatother
+\AddToShipoutPicture{\BackgroundPicture{gfx/entwurf}{18cm}{45}}
+
+%%Dieses Kommando trennt die einzelnen Dokumentenabschnitte
+%%wahlweise eine neue Seite
+\newcommand{\ABSCHNITTSTRENNER}{\cleardoublepage }
+
+%%Dieses Kommando setzt einen Backslash,
+%%an dem ohne ein Trennzeichen getrennt werden kann
+\newcommand{\trennBS}{{\tt\char92}" "}
+
+%%Dieses Kommando setzt um den übergebenen Parameter
+%%deutsche doppelte Anführungszeichen
+\newcommand{\gdq}[1]{\glqq{}#1\grqq{}}
+
+%%Ein Platzhalter für Daten, die später ergätzt werden
+\newcommand{\weissnicht}{XX?\-XX?\-XX?\-XX}
+
+\newcommand{\wichtig}[1]{\textbf{Wichtig:} #1}
+\newcommand{\textindex}[1]{#1\index{#1}}
+
+\newcommand{\cmd}[1]{\texttt{#1}}
+
+\newcommand{\appKV}{Kraftstoffverbrauch~3}
+
+\definecolor{gruen}{rgb}{0.0,1.0,0.0}
+\definecolor{gelb}{rgb}{1.0,1.0,0.0}
+\definecolor{weiss}{rgb}{1.0,1.0,1.0}
+\definecolor{schwarz}{rgb}{0.0,0.0,0.0}
+\definecolor{rot}{rgb}{1.0,0.0,0.0}
+%%Parameter
+%% 1  Text der Box
+%% 2  Farbe des Textes
+%% 3  Hintergrundfarbe der Box
+\newcommand{\taste}[3]{\fcolorbox{schwarz}{#3}{\textcolor{#2}{#1}}}
+\newcommand{\tasteCE}{\taste{\textbf{CE}}{rot}{weiss}}
+\newcommand{\tasteCA}{\taste{\textbf{CA}}{rot}{weiss}}
+\newcommand{\tastelkm}{\taste{l/km}{schwarz}{gelb}}
+\newcommand{\tasteHist}{\taste{+Hist}{schwarz}{gruen}}
+\newcommand{\tasteE}{\taste{E}{schwarz}{gruen}}
+\newcommand{\tasteOK}{\taste{OK}{schwarz}{weiss}}
+\newcommand{\tasteAbbrechen}{\taste{Abbrechen}{schwarz}{weiss}}
+\newcommand{\tasteLoeschen}{\taste{Löschen}{schwarz}{weiss}}
+
+\pagestyle{scrheadings}
+\ihead{\href{http://ewus.de/}{\includegraphics[height=1.5ex,draft=false]{gfx/ewuslogo}}
+  } \chead{Handbuch} \ohead{\appKV}
+\ifoot{\tiny Erik Wegner} \cfoot{} \ofoot{\pagemark}
+
+\defpagestyle{plainwfl}{
+(0pt,0pt)
+{} {} {}
+(0pt,0pt)
+}{
+(0pt,0pt)
+{ } { } { }
+(0pt,0pt)
+}
+
+%\setlength{\parindent}{0mm}
+%%Befehle für die Titelseite
+\title{ 
+%\includegraphics[scale=0.333]{logo_a} \\ 
+Handbuch \\ 
+der Anwendung\\ 
+\appKV \\
+\includegraphics[draft=false]{gfx/kanister}}
+\author{Erik Wegner}
+%Datum wird automatisch eingefügt
+\begin{document}
+\pdfbookmark[0]{Titelseite}{titel}
+\maketitle
+\thispagestyle{plainwfl}
+\mbox{}
+\vfill
+
+%%Die Zusammenfassung
+\begin{abstract}
+%\setlength{\parindent}{0mm}
+\pdfbookmark[0]{Zusammenfassung}{}
+\begin{center}
+\textbf{Zusammenfassung}
+\index{Zusammenfassung}
+\end{center}
+
+Dieses Handbuch beschreibt die Anwendung \appKV.
+
+\end{abstract}
+\ABSCHNITTSTRENNER
+
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents
+
+\ABSCHNITTSTRENNER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Allgemeines}
+
+Die Anwendung \appKV{} dient zur Berechnung des
+Kraftstoffverbrauchs. Die eingegebenen Werte können in einer Historie
+gespeichert und anschließend in einem Diagramm dargestellt und werden.
+
+\hypertarget{HTsysvoraus}{\section{\textindex{Systemvoraussetzungen}}}
+Die Anwendung ist in Java (\url{http://java.sun.com}) programmiert und
+benötigt mindestens Version~1.5.0. Auf der Sun Microsystems Seite
+befindet sich eine
+\href{http://java.sun.com/j2se/1.5.0/system-configurations.html}{Liste
+  unterstützter Plattformen} und den jeweiligen Systemvoraussetzungen.
+
+Installieren Sie gegebenenfalls die die aktuellste Java-Version.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ABSCHNITTSTRENNER
+\part{Arbeiten mit der Anwendung}
+\section{\textindex{Starten}\index{Aufruf}}
+Vergewissern Sie sich, dass Ihr System die
+\hyperlink{HTsysvoraus}{Systemvoraussetzungen} erfüllt.
+
+Die Anwendung kann, wenn Ihr System so konfiguriert ist, durch (Doppel-)Klicken
+auf der JAR-Datei gestartet werden. Alternativ kann der Aufruf der Befehlszeile
+
+\cmd{java -jar kv3.jar}
+
+erfolgen. Die verfügbaren Kommandozeilenschalter sind im \hyperlink{HTCLIParams}{Anhang
+\ref{CLIParams}} erläutert. Wird kein Parameter übergeben und ist
+keine Konfigurationsdatei vorhanden, öffnet sich die Java-Swing-Oberfläche.
+
+\section{Einfache Berechnung}
+\parpic[r]{\includegraphics[scale=0.5]{gfx/prg_eingabe_startleer}} 
+Die Anwendung startet mit der Eingabeseite. Oben befinden sich die
+zwei Eingabefelder für Strecke und Kraftstoff. Das aktive Feld wird
+orange hinterlegt. Darunter erfolgt die Ausgabe der
+Berechnungsergebnisse. Den größten Teil des Anwendungsfensters nimmt
+die Zahlentastatur ein.
+
+Geben Sie in die Felder Strecke bzw.\,Kraftstoff die Werte ein. Alternativ
+können Sie die Komma- und die Zahlentasten verwenden, schließen Sie in
+diesem Fall die Eingabe jeweils mit der Taste \tasteE{} ab. Dabei wird
+automatisch das nächste Eingabefeld aktiv und Sie können die Eingabe
+fortsetzen. Haben Sie beide Werte eingegeben, wird die Berechnung
+durchgeführt und das Ergebnis erscheint.
+
+Zusätzlich stehen Ihnen folgende \textindex{Schaltflächen} zur Verfügung:
+\begin{itemize}
+\item[\tasteCE] (Clear Entry) löscht den Inhalt des aktiven Felds
+\item[\tasteCA] (Clear All) löscht den Inhalt aller Felder
+\item[\tastelkm] schaltet zwischen den Eingabefeldern Kraftstoff~(l) und
+  Strecke~(km) um
+\item[\tasteE] (Enter) springt zum nächsten Eingabefeld und führt bei Bedarf
+  die Berechnung des Verbrauchs aus
+\item[\tasteHist] das aktuelle Berechnungsergebnis wird zur Historie
+  hinzugefügt
+\end{itemize}
+\picskip{0}
+\section{Einträge zur Historie hinzufügen}
+Sie können die aktuellen Werte für Strecke und Kraftstoff zur Historie
+hinzufügen. Verwenden Sie dafür auf der Eingabeseite die Schaltfläche
+\tasteHist{}. Daraufhin erscheint der Dialog zur Vervollständigung der
+Daten (siehe \hyperlink{HTHEDlg}{Absatz \ref{HEDlg}}).
+
+\hypertarget{HTHEDlg}{\section{Historisierte Einträge bearbeiten\label{HEDlg}}}
+\parpic[r]{\includegraphics[scale=0.5]{gfx/prg_hedlg1}} Mit Hilfe des
+Dialogs können Sie die Daten eines Historieneintrags bearbeiten. Der
+Dialog erscheint, wenn Sie auf einen Eintrag in der Historienliste
+klicken oder einen Eintrag zur Historie hinzufügen (Schaltfläche
+\tasteHist{} auf der Eingabeseite).
+
+Ein Historieneintrag speichert die Informationen über die Strecke und den
+verbrauchten Kraftstoff. Zusätzlich kann angegeben werden, wann
+getankt wurde (Datum) und zu welchem Preis (\EURtm{} je Liter).
+
+Der Eintrag Fahrzeug dient zur Verwaltung mehrerer Fahrzeuge (0 bis
+9), sodass für jedes Fahrzeug eine eigene Statistik geführt werden
+kann.
+
+Unter Streckentyp kann ausgewählt werden, ob die gefahrene Strecke
+hauptsächlich innerstädtisch (Stadt) oder außerstädtisch (Land)
+bzw.\,nicht eindeutig zuordbar (Unbekannt) ist.
+
+Die Schaltfläche \tasteOK{} übernimmt die Änderungen. 
+
+Durch Drücken von \tasteAbbrechen{} werden die Änderungen verworfen
+und der Dialog geschlossen.
+
+Wird die Taste \tasteLoeschen{} betätigt, wird der Eintrag aus der
+Historie entfernt.
+
+\section{Ein Diagramm erstellen}
+Diese Funktion ist noch nicht implementiert.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ABSCHNITTSTRENNER
+\appendix
+\part{Anhang}
+\hypertarget{HTCLIParams}
+{\section{\textindex{Kommandozeilenparameter}\label{CLIParams}\index{Parameter!Kommandozeile}}}
+Die Parameter können durch Aufruf mit dem Parameter \cmd{-{}-help} angezeigt
+werden.
+\subsection{-ui\index{ui}}
+Der Schalter \cmd{-ui} erlaubt die Auswahl der
+\textindex{Benutzerschnittstelle} (user interface).
+
+Zur Auswahl stehen 3~Möglichkeiten:
+\begin{description}
+\item[swing] Die Anwendung läuft mit einer Java~Swing-Oberfläche (Standard).
+\item[console] Die Anwendung läuft als textbasierte Anwendung ohne
+  grafisches Interface.
+\item[ncurses] Die Anwendung läuft als textbasierte Anwendung unter
+  Verwendung der ncurses-Bibliotheken (noch nicht implementiert).
+\end{description}
+
+\subsection{-cfgFormat\index{cfgFormat}}
+Die Einstellungen der Anwendung werden in einer separaten Datei
+(\cmd{\textindex{kv3.cfg}}) abgelegt. In welchem Format diese Datei
+erstellt wird, kann über diesen Schalter gesteuert werden.
+\begin{description}
+\item[XML] Die Datei ist ein XML-Dokument (Standard).
+\item[TXT] Die Datei ist eine flache Textdatei der Form \cmd{PARAMETER=Wert}.
+\end{description}
+
+\hypertarget{HTcfgDatei}{\subsection{-cfgDatei\index{cfgDatei}}}
+Über diesen Schalter kann eine alternative Konfigurationsdatei
+angegeben werden (per Voreinstellung wird die Datei \cmd{kv3.cfg}
+verwendet).
+
+\section{\textindex{Konfigurationsdateiparameter}\index{Parameter!Konfigurationsdatei}}
+In der Voreinstellung wird die Datei \cmd{kv3.cfg} verwendet, um
+Einstellungen permanent zu speichern. Über den Kommandozeilenschalter
+\hyperlink{HTcfgDatei}{-cfgDatei} kann eine alternative Parameterdatei
+verwendet werden.
+
+\begin{tabular}{ll}
+\textbf{Parameter} & \textbf{Beschreibung} \\
+cfgDatei & Pfad zur Konfigurationsdatei\footnotemark \\
+cfgFormat & Format der Konfigurationsdatei \\
+HistorieColInhalt\textsl{I} & Inhalt der Spalte \textsl{I} in der
+Historienliste \\
+HistorieColNum & Anzahl der Spalten der Historienliste \\
+HistorieDatei & Pfad zur Historiendatei \\
+\end{tabular}
+
+%%Hier muss die Anzahl der Fußnoten in der Tabelle angegeben werden
+\addtocounter{footnote}{-1}
+%%und anschließend der Text der Fußnote nach dem Schema
+%%\stepcounter{footnote}\footnotetext{Text der Fußnote}
+%%eingetragen werden
+\stepcounter{footnote}\footnotetext{Der Wert dieses  Parameters wird
+  nur beim Speichern der Einstellungen gesetzt, darüber hinaus hat er
+  keine Bedeutung}
+
+\section{Format der Historiendatei}
+Die Anwendung speichert die historischen Daten in einer
+kommagetrennten Datei (\textindex{CSV}). Wenn die Vorgabeeinstellungen
+nicht angepasst werden, wird der Dateiname \cmd{historie.kv3}
+verwendetet. Das Dezimaltrennzeichen ist der Punkt. Die Datenfelder
+erscheinen in folgender Reihenfolge:
+\begin{enumerate}
+\item Strecke
+\item Kraftstoffmenge
+\item Preis
+\item Fahrzeugnummer
+\item Streckentyp (Unbekannt, Stadt, Land)
+\item Datum
+\end{enumerate}
+
+%\section{Dateiauszüge}
+%\subsection{\textindex{\gls{Antwortdatei}} \textindex{S792DC01}}
+%\VerbatimInput[fontsize=\scriptsize]{zusatz/s792dc01.txt}
+
+\ABSCHNITTSTRENNER
+\pdfbookmark[0]{Index}{index}
+\printindex
+
+\end{document}
