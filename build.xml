@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<project default="classes" name="Kraftstoffverbrauch 3">
+	<description>
+	Berechnet den Kraftstoffverbrauch und speichert die Daten
+	als Historie zur Auswertung ab.
+	</description>
+	<property name="src" value="src" />
+	<property name="classes" value="classes" />
+	<property name="doc" value="doc" />
+	<property name="klassenbasis" value="de.ewus" />
+	<target name="classes" description="Erstelle die Java-Klassen zur Ausführun">
+		<javac destdir="${classes}" srcdir="${src}" />
+	</target>
+	<target name="doc" description="Erstellt die Klassendokumentation mittels javadoc">
+		<javadoc destdir="${doc}" />
+	</target>
+	<target name="all" depends="classes,doc" description="Erstellt alles">
+	</target>
+	<target name="clean" description="Entfernt die Java-Klassen und die erstellte Dokumentation">
+		<delete dir="${classes}" />
+		<delete dir="${doc}" />
+	</target>
+	<target name="jar" description="Erstellt eine ausführbare JAR-Datei" depends="classes">
+		<jar basedir="${classes}" destfile="kv3.jar">
+			<manifest>
+				<attribute name="Build-By" value="Erik Wegner"/>
+				<attribute name="Main-class" value="de.ewus.kv3.Kleber"/>
+			</manifest>
+		</jar>
+	</target>
+	<target name="srcjar" description="Erstellt eine JAR-Datei mit den Quellen der Anwendung">
+		<jar basedir="${src}" destfile="kv3_src.jar">
+			<manifest>
+				<attribute name="Build-By" value="Erik Wegner"/>
+			</manifest>
+		</jar>
+	</target>
+</project>
