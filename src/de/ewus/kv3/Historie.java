@@ -2,7 +2,6 @@ package de.ewus.kv3;
 
 import java.util.Vector;
 import java.io.*;
-import java.text.NumberFormat;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -13,33 +12,16 @@ import javax.swing.table.AbstractTableModel;
  */
 public class Historie extends javax.swing.table.AbstractTableModel {
     private Kleber kleber;
-    private String[] columnNames = {
-	"Strecke", 
-	"Liter", 
-	"Liter/100km", 
-	"Strecke/Liter", 
-	"Datum", 
-	"Fahrzeug", 
-	"Streckentyp", 
-	"Preis"};
-    private final int maxColumnZahl = 8,
-        STRECKE = 0,
-        KRAFTSTOFF = 1,
-        KRAFTSTOFF100 = 2,
-        STRECKEJELITER = 3,
-        DATUM = 4,
-        FAHRZEUG = 5,
-        STRECKENTYP = 6,
-        PREIS = 7;
-    private int columnZahl = maxColumnZahl;
-    private int[] columnInhalt = {STRECKE, KRAFTSTOFF, KRAFTSTOFF100, 
-        STRECKEJELITER, DATUM, FAHRZEUG, STRECKENTYP, PREIS};
+
+    private int columnZahl = Historieneintrag.anzahlFelder;
+    private int[] columnInhalt = {Historieneintrag.STRECKE, Historieneintrag.KRAFTSTOFF, 
+				  Historieneintrag.KRAFTSTOFF100, Historieneintrag.STRECKEJELITER, 
+				  Historieneintrag.DATUM, Historieneintrag.FAHRZEUG, 
+				  Historieneintrag.STRECKENTYP, Historieneintrag.PREIS};
 
     private final String propPrefix = "Historie",
             COLNUM = propPrefix + "ColNum",
             COLINH = propPrefix + "ColInhalt";
-
-    private NumberFormat nf;
 
     private Vector<Historieneintrag> historie;
     /**
@@ -48,15 +30,13 @@ public class Historie extends javax.swing.table.AbstractTableModel {
     public Historie(Kleber kleber) {
 	historie = new Vector<Historieneintrag>();
         this.kleber = kleber;
-	this.nf = NumberFormat.getInstance();
-	this.nf.setMaximumFractionDigits(2);
         //Hole Einstellungen Anzahl der Spalten
         if (kleber.getProperty(this.COLNUM) != null) {
             this.columnZahl = toInt(kleber.getProperty(this.COLNUM));
         }
 	
         //Hole Einstellung Inhalte der Spalten
-        for (int i = 0; i < maxColumnZahl; i++) {
+        for (int i = 0; i < Historieneintrag.anzahlFelder; i++) {
             if (kleber.getProperty(this.COLINH + Integer.toString(i)) != null) {
                 this.columnInhalt[i] = toInt(kleber.getProperty(this.COLINH + 
 								Integer.toString(i)));
@@ -70,7 +50,7 @@ public class Historie extends javax.swing.table.AbstractTableModel {
      */
     public void dispose() {
         kleber.setProperty(this.COLNUM, Integer.toString(this.columnZahl));
-        for (int i = 0; i < maxColumnZahl; i++) {
+        for (int i = 0; i < Historieneintrag.anzahlFelder; i++) {
             kleber.setProperty(this.COLINH + Integer.toString(i),
                     Integer.toString(columnInhalt[i]));
         }
@@ -159,24 +139,7 @@ public class Historie extends javax.swing.table.AbstractTableModel {
      */
     public Object getValueAt(int row, int column) {
         Historieneintrag e = eintragNr(row);
-        String r = "";
-	
-        switch (columnInhalt[column]) {
-            case STRECKE        : r = nf.format(e.holeStrecke()); break;
-            case KRAFTSTOFF     : r = nf.format(e.holeKraftstoff()); break;
-            case KRAFTSTOFF100  : r = nf.format(e.holeVerbrauch100km()); break;
-            case STRECKEJELITER : r = nf.format(e.holeStreckeJeLiter()); break;
-            case DATUM          : r = e.holeDatum(); break;
-            case FAHRZEUG       : r = Integer.toString(e.holeFahrzeug()); break;
-            case STRECKENTYP    : switch (e.holeStreckentyp()) {
-                case Unbekannt      : r = "U"; break;
-                case Stadt          : r = "S"; break;
-                case Land           : r = "L"; break;
-            }
-            break;
-            case PREIS          : r = Float.toString(e.holePreis()); break;
-        }
-        return r;
+	return e.feld(columnInhalt[column]);
     }
 
 
@@ -192,7 +155,7 @@ public class Historie extends javax.swing.table.AbstractTableModel {
          *  System.err.println("columnInhal[" + col + "]=" + columnInhalt[col]);
          *  System.err.println("columnNames[" + columnInhalt[col] + "] = " + columnNames[columnInhalt[col]]);
          */
-        return columnNames[columnInhalt[col]];
+        return Historieneintrag.feldNamen[columnInhalt[col]];
     }
     
     public void neueWerte() {

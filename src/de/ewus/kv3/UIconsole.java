@@ -18,9 +18,16 @@ public class UIconsole extends UIManager
 	TextNormal = "\033[0m";
 
     private final String
-	PrgSprRechnen = "r",
+	PrgSprRechnen = "r",	
 	PrgSprHistorie = "h",
-	PrgEnde = "b";
+	PrgEnde = "b",
+	RechWerteZuHist = "h",
+	HEStrecke = "s",
+	HEKraftstoff = "k",
+	HEDatum = "d",
+	HEPreis = "p", 
+	HEFahrzeug = "f",
+	HEStreckentyp = "t";
 
     private BufferedReader br;
     private boolean eingabeOK = false;
@@ -46,12 +53,8 @@ public class UIconsole extends UIManager
     public void dispose() {
     }
     
-    public  HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e) {
-        return HEDlgErgebnis.Abbrechen;
-    }
-
     private void navUeberschrift(String u) {
-	System.out.println(TextGruen + "> " + u + TextNormal);
+	System.out.println("\n\n" + TextGruen + "> " + u + TextNormal);
     }
 
     private void menuEintrag(String taste, String text) {
@@ -121,14 +124,22 @@ public class UIconsole extends UIManager
     }
 
     private void menuRechnen() {
-	navUeberschrift("Berechnung durchfuehren");
+	boolean weiterrechnen;
+	do {
+	    weiterrechnen = false;
+	    navUeberschrift("Berechnung durchfuehren");
 	
-	System.out.println(
-			   werteBereitstellen(
-					      eingabe("Strecke = "),
-					      eingabe("Kraftstoff = ")
-					      )
-			   );
+	    System.out.println(werteBereitstellen(
+						  eingabe("Strecke = "),
+						  eingabe("Kraftstoff = ")
+						  ));
+	    menuEintrag(PrgSprRechnen, "neue Berechnung durchfuehren");
+	    menuEintrag(RechWerteZuHist, "zur Historie hinzufuegen");
+	    menuEintrag("", " zurueck zum Hauptmenue mit beliebiger Eingabe");
+	    String antwort = eingabe();
+	    if (antwort.equals(PrgSprRechnen)) weiterrechnen = true;
+	    if (antwort.equals(RechWerteZuHist)) historieNeueWerte();
+	} while (weiterrechnen);
     }
 
     private void menu() {
@@ -136,5 +147,24 @@ public class UIconsole extends UIManager
 	if (auswahl.equals(PrgSprRechnen)) menuRechnen();
 	if (auswahl.equals(PrgSprHistorie)) menuHistorie();
 	if (auswahl.equals(PrgEnde)) aktiv = false;
+    }
+
+    public HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e) {
+	//System.out.println("\nHistorieneintrag:" + e + "\n");
+	//TODO: menuEintrag aus e.getFeldbezeichnung() generieren
+	navUeberschrift("Historieneintrag bearbeiten");
+	menuHE1(HEStrecke, Historieneintrag.STRECKE, e);
+	menuHE1(HEKraftstoff, Historieneintrag.KRAFTSTOFF, e);
+	menuHE1(HEDatum, Historieneintrag.DATUM, e);
+	menuHE1(HEPreis, Historieneintrag.PREIS, e);
+	menuHE1(HEFahrzeug, Historieneintrag.FAHRZEUG, e);
+	menuHE1(HEStreckentyp, Historieneintrag.STRECKENTYP, e);
+
+        return HEDlgErgebnis.Abbrechen;
+    }
+
+    public void menuHE1(String taste, int feld, Historieneintrag e) {
+	menuEintrag(taste, "Wert fuer " + Historieneintrag.feldNamen[feld] +
+		    " aendern (" + e.feld(feld) + ")");
     }
 }

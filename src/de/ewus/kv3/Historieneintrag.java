@@ -2,6 +2,7 @@ package de.ewus.kv3;
 
 import java.util.*;
 import java.text.*;
+import java.text.NumberFormat;
 
 public class Historieneintrag {
     public enum Streckentyp { Unbekannt, Stadt, Land };
@@ -15,10 +16,38 @@ public class Historieneintrag {
     private final String datumpattern = "dd.MM.yyyy";
     public final int maxFahrzeug = 10;
     public final String trenner = ",";
+
+    public static final int anzahlFelder = 8;
+    public static final String[] feldNamen = {
+	"Strecke", 
+	"Liter", 
+	"Liter/100km", 
+	"Strecke/Liter", 
+	"Datum", 
+	"Fahrzeug", 
+	"Streckentyp", 
+	"Preis"};
+    public static final int
+        STRECKE = 0,
+        KRAFTSTOFF = 1,
+        KRAFTSTOFF100 = 2,
+        STRECKEJELITER = 3,
+        DATUM = 4,
+        FAHRZEUG = 5,
+        STRECKENTYP = 6,
+        PREIS = 7;
+
+    private NumberFormat nf;
+
+    private void initNF() {
+	this.nf = NumberFormat.getInstance();
+	this.nf.setMaximumFractionDigits(2);
+    }
     
     public Historieneintrag(float strecke, float kraftstoff) {
         setzeStrecke(strecke);
         setzeKraftstoff(kraftstoff);
+	initNF();
     }
     
     public Historieneintrag(String serial) {
@@ -30,6 +59,7 @@ public class Historieneintrag {
         try { setzeFahrzeug(Integer.valueOf(teile[c1++])); } catch (NumberFormatException e) {}
         setzeStreckentyp(teile[c1++]);
         try { setzeDatum(teile[c1++]); } catch (NumberFormatException e) {}
+	initNF();
     }
     
     public String toString() {
@@ -43,6 +73,26 @@ public class Historieneintrag {
         return sb.toString();
     }
     
+    public String feld(int feldnummer) {
+        String r = "";	
+        switch (feldnummer) {
+            case STRECKE        : r = nf.format(holeStrecke()); break;
+            case KRAFTSTOFF     : r = nf.format(holeKraftstoff()); break;
+            case KRAFTSTOFF100  : r = nf.format(holeVerbrauch100km()); break;
+            case STRECKEJELITER : r = nf.format(holeStreckeJeLiter()); break;
+            case DATUM          : r = holeDatum(); break;
+            case FAHRZEUG       : r = Integer.toString(holeFahrzeug()); break;
+            case STRECKENTYP    : switch (holeStreckentyp()) {
+                case Unbekannt      : r = "U"; break;
+                case Stadt          : r = "S"; break;
+                case Land           : r = "L"; break;
+            }
+            break;
+            case PREIS          : r = Float.toString(holePreis()); break;
+        }
+        return r;
+    }
+
     public float        holeVerbrauch100km() {return kraftstoff*100/strecke;}
     public float        holeStreckeJeLiter() {return strecke/kraftstoff; }
     
