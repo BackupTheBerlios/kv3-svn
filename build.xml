@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
+<!DOCTYPE project SYSTEM "ressourcen/ant.dtd">
 <project default="classes" name="Kraftstoffverbrauch 3">
 	<description>
 	Berechnet den Kraftstoffverbrauch und speichert die Daten
@@ -26,11 +27,17 @@
 		<delete file="${SRCJAR}" />
 	</target>
 	<target name="jar" description="Erstellt eine ausführbare JAR-Datei" depends="classes">
-		<jar basedir="${classes}" destfile="${BINJAR}">
+		<jar destfile="${BINJAR}">
 			<manifest>
 				<attribute name="Build-By" value="Erik Wegner"/>
 				<attribute name="Main-class" value="${klassenbasis}.Kleber"/>
 			</manifest>
+			<fileset dir="${classes}">
+				<include name="**"/>
+			</fileset>
+			<fileset dir="${basedir}">
+				<include name="ressourcen/img/kanister.png"/>				
+			</fileset>			
 		</jar>
 	</target>
 	<target name="srcjar" description="Erstellt eine JAR-Datei mit den Quellen der Anwendung">
@@ -40,7 +47,7 @@
 			</manifest>
 			<fileset dir=".">
 				<include name="${src}/**"/>
-				<include name="ressourcen/**"/>
+				<include name="ressourcen/img/kanister.png"/>
 				<include name="build.xml"/>
 			</fileset>						
 		</jar>

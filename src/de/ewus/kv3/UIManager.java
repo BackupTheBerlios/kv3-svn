@@ -9,6 +9,13 @@ import java.lang.reflect.Method;
  * @version    3.0
  */
 public abstract class UIManager {
+    protected float
+        strecke = 0.0f,
+        kraftstoff = 0.0f,
+        ver100 = 0.0f,
+        strLtr = 0.0f;
+        
+        
     /**
      *  Description of the Field
      */
@@ -25,11 +32,16 @@ public abstract class UIManager {
     }
 
 
+    public void setzeVerbrauch100km(float ver100) {this.ver100 = ver100;}
+    public void setzeStreckeJeLiter(float strLtr) {this.strLtr = strLtr;}
+    /*public float holeStrecke() {return this.strecke;}
+    public float holeKraftstoff() {return this.kraftstoff;}*/
+    
     /**
      *  Teilt Kleber mit, dass neue Werte zur Berechnung vorliegen.
      */
     protected void neueWerte() {
-        k.neueWerte();
+        k.neueWerte(strecke, kraftstoff);
     }
 
 

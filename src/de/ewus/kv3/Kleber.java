@@ -31,8 +31,10 @@ public class Kleber {
      *  Diese Methode wird von UIManager aufgerufen, wenn durch die
      *  Oberfläche neue Werte zur Berechnung bereitstehen.
      */
-    public void neueWerte() {
+    public void neueWerte(float strecke, float kraftstoff) {
         System.out.println("Neue Werte");
+        ui.setzeVerbrauch100km(kraftstoff*100/strecke);
+        ui.setzeStreckeJeLiter(strecke/kraftstoff);
     }
 
 
@@ -67,8 +69,7 @@ public class Kleber {
         konfig = new Konfiguration("kv3konfig.txt", true);
         //Zuerst alle Optionen auf Standard setzen
         setzeUI(UITypen.swing);
-        gfxeinstellungen = new GfxEinstellungen();
-
+        gfxeinstellungen = new GfxEinstellungen();        
         //Suche nach Konfigurationsoptionen in der konfig-Datei
 
         //Suche nach Konfigurationsoptionen auf der Kommandozeile

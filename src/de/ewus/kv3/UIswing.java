@@ -2,6 +2,8 @@ package de.ewus.kv3;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
+import java.io.*;
 
 /**
  * Eine Implementation des UIManagers mit einer Java SWING-Oberfläche.
@@ -26,14 +28,37 @@ import java.awt.event.*;
  * @created    1. Oktober 2004
  * @version    1.0
  */
-public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener {
+public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener {
     private JFrame frame;  //Das Fenster
+    private JLabel lStrecke, lKraftstoff, //Label mit wechselnder Hintergrundfarbe
+        lErgebnis;
+    private JTextField tfStrecke, tfKraftstoff; //Textfelder für Eingabe
+    
+    private enum felder {Kraftstoff, Strecke};
+    private felder aktivesFeld = felder.Kraftstoff;
+    private boolean tfInhaltLoeschen = false;
     
     /**
      * Constructor for objects of class UIswing
      */
     public UIswing() { }
 
+        /** Handle the key typed event from the text field. */
+    public void keyTyped(KeyEvent e) {
+	    System.out.println("KEY TYPED: " + e.getKeyChar());        
+        // TODO: Auf Tastendrücke angemessen reagieren
+        zahlentaste("");
+    }
+
+    /** Handle the key pressed event from the text field. */
+    public void keyPressed(KeyEvent e) {
+	    //System.out.println("KEY PRESSED: " + e);
+    }
+
+    /** Handle the key released event from the text field. */
+    public void keyReleased(KeyEvent e) {
+        //System.out.println("KEY RELEASED: " + e);
+    }
 
     /**
      *  Description of the Method
@@ -98,6 +123,47 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
     }
     
     /**
+     *  Aktiviert das angegebene Feld
+     */
+    public void setzeAktivesFeld(felder feld) {
+        aktivesFeld = feld;
+        lStrecke.setOpaque(feld == felder.Strecke);
+        lKraftstoff.setOpaque(feld == felder.Kraftstoff);
+        lStrecke.repaint();
+        lKraftstoff.repaint();        
+    }
+    
+    private void werteBereitstellen() {
+        boolean werteIO = false;
+        try {
+            strecke = Float.parseFloat(tfStrecke.getText());
+            kraftstoff = Float.parseFloat(tfKraftstoff.getText());
+            werteIO = true;
+        } catch (NumberFormatException e) {
+            System.err.println(e);
+        }
+        System.out.println("Strecke=" + strecke + ", Kraftstoff=" + kraftstoff);
+        if (werteIO) {
+            neueWerte();
+            //System.out.println("Verbrauch100km="+ver100);
+            //System.out.println("StreckeJeLiter="+strLtr);
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            pw.printf("Verbrauch: %1.2f, Strecke je Liter %1.2f\n", ver100, strLtr);
+            lErgebnis.setText(sw.toString());
+        }
+    }
+    
+    private void naechstesFeldAktivieren() {
+        if (aktivesFeld == felder.Strecke) {
+            setzeAktivesFeld(felder.Kraftstoff);
+        } else {
+            setzeAktivesFeld(felder.Strecke);
+            werteBereitstellen();
+        }
+    }
+    
+    /**
      *  Description of the Method
      */
     public void startUI() {
@@ -114,22 +180,76 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
          *  create and show the GUI
          */
         frame = new JFrame("Kraftstoffverbrauch 3.0");
-        ImageIcon icon = new ImageIcon("kanister.png", "Kanister");
-        frame.setIconImage(icon.getImage());
-        addUIElements(frame);
+        java.net.URL imageURL = UIswing.class.getResource("ressourcen/img/kanister.png");
+        if (imageURL != null) {
+            // FIXME: Application Icon wird nicht geladen
+            ImageIcon icon = new ImageIcon(imageURL);
+            frame.setIconImage(icon.getImage());
+        }
+        addUIElements(frame);        
         frame.addWindowListener(this);
-        frame.setSize(new Dimension(240, 320));
+        setzeAktivesFeld(felder.Strecke);
+        tfInhaltLoeschen = true;
+        
+        //frame.setSize(new Dimension(240, 320));
+        // TODO: Fensterlaypout anpassen
+        frame.pack();
         frame.setVisible(true);
     }
 
 
+    private void zahlentaste(String taste) {
+        JTextField tf = (aktivesFeld == felder.Kraftstoff ? tfKraftstoff : tfStrecke);
+        StringBuffer sb = new StringBuffer(tfInhaltLoeschen ? "" : tf.getText());
+        
+        if (taste.equals(",")) {
+            //Aus dem Dezimaltrennzeichen ";" wird das amerikanische
+            //Trennzeichen "."
+            taste = ".";
+            
+            //Enthält der Inhalt des Textfelds schon ein Komma?
+            //Dann darf kein zweites angehängt werden
+            if (sb.indexOf(".") != -1) taste = "";
+        }
+        sb.append(taste);
+        String sbp = ""; int c1 = 0;
+        System.out.println("sb.length()=" + sb.length());
+        boolean benutzesbp = false;
+        do {
+            System.out.println("c1=" + c1);
+            System.out.println("sbp=" + sbp);
+            
+            try {
+                if (sb.length() > 0)
+                    sbp = (new Float(sb.substring(0, sb.length() - c1))).toString();                    
+            } catch (NumberFormatException e) {
+                benutzesbp = true;
+                sbp = "";
+            }
+            c1++;
+        }  while (sbp.length() < 1 && c1 < sb.length());
+        tf.setText(benutzesbp ? sbp : sb.toString());
+        tfInhaltLoeschen = false;
+        
+    }
+    
     /**
-     *  Description of the Method
+     *  Die Methode verarbeitet alle ActionEvents
      *
-     * @param  e  Description of the Parameter
+     * @param  e  das aufgetretende ActionEvent
      */
     public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getActionCommand());
+        String command = e.getActionCommand();
+        System.out.println(command);
+        if (command.equals("l/km")) naechstesFeldAktivieren();
+        if (command.matches("[0-9,]")) zahlentaste(command);
+        if (command.equals("E")) {tfInhaltLoeschen = true; naechstesFeldAktivieren();}
+        if (command.equals("CE")) (aktivesFeld == felder.Kraftstoff ? tfKraftstoff : tfStrecke).setText("");
+        if (command.equals("CA")) {tfKraftstoff.setText(""); tfStrecke.setText(""); }
+        if (command.equals("Hist+")) {
+            // TODO: Historie
+            System.out.println("Historie");
+        }
     }
 
 
@@ -154,28 +274,42 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         c.gridy = 0;
         c.fill = GridBagConstraints.NONE;
         c.weightx = 0.0;
-        p11.add(new JLabel("Strecke"), c);
+        this.lStrecke = new JLabel("Strecke");
+        lStrecke.setBackground(Color.orange);
+        // TODO: rechtsbündige Ausrichtung für Textfeld
+        p11.add(lStrecke, c);
         c.gridx = 1;
         c.gridy = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        p11.add(new JTextField(), c);
+        tfStrecke = new JTextField();
+        tfStrecke.addKeyListener(this);
+        // FIXME: Textfeld darf keine Eingaben durch Benutzer anzeigen
+        // IDEA: JFormattedTextField verwenden?!?
+        p11.add(tfStrecke, c);
         c.gridx = 0;
         c.gridy = 1;
         c.fill = GridBagConstraints.NONE;
         c.weightx = 0.0;
-        p11.add(new JLabel("Kraftstoffmenge"), c);
+        lKraftstoff = new JLabel("Kraftstoffmenge");
+        lKraftstoff.setBackground(Color.orange);
+        // TODO: rechtsbündige Ausrichtung für Textfeld
+        p11.add(lKraftstoff, c);
         c.gridx = 1;
         c.gridy = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        p11.add(new JTextField(), c);
+        tfKraftstoff = new JTextField();
+        tfKraftstoff.addKeyListener(this);
+        // FIXME: Textfeld darf keine Eingaben durch Benutzer anzeigen
+        p11.add(tfKraftstoff, c);
         c.gridx = 0;
         c.gridy = 2;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
         c.gridwidth = 2;
-        p11.add(new JLabel("Ergebnis der Berechnung"), c);
+        lErgebnis = new JLabel("Ergebnis der Berechnung");
+        p11.add(lErgebnis, c);
         p1.add(p11, BorderLayout.NORTH);
         //Tastenfelder
         JPanel p12 = new JPanel(new GridLayout(4, 4));
@@ -183,6 +317,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         Font f = p12.getFont();
         Font f2 = new Font(f.getName(), Font.BOLD, f.getSize() * 2);
         for (int c1 = 0; c1 < tasten.length; c1++) {
+            // TODO: Tab-Taste deaktivieren
             b = new JButton(tasten[c1]);
             b.addActionListener(this);
             switch (c1) {
@@ -239,7 +374,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
             if (s.equals(gfxe.sortierung)) sortliste.setSelectedIndex(sortliste.getItemCount()-1);
         }
         JComboBox drehliste = new JComboBox();
-        for (drehung d : drehung.values()) {
+        for (GfxEinstellungen.Drehung d : GfxEinstellungen.Drehung.values()) {
             drehliste.addItem(d.bezeichnung());
             if (d.equals(gfxe.drehung)) drehliste.setSelectedIndex(drehliste.getItemCount()-1);
         }
@@ -279,14 +414,38 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         p32.add(new JLabel("Vorschau"), cl); cl.gridy++;
         p32.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;        
         //Seite Info
-        
+        JEditorPane infoarea = new JEditorPane();
+        JScrollPane spia = new JScrollPane(infoarea,
+                    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        infoarea.setEditable(false);
+        infoarea.setContentType("text/html");
+        infoarea.setPreferredSize(new Dimension(200,300));
+        // FIXME: Textfeld nach oben scrollen
+        infoarea.setText("<html>"+
+            "<p style=\"color:blue;\">Kraftstoffverbrauch 3.0</p>" +
+            "<p style=\"color:red;\">Erik Wegner</p>"+            
+            "<p>This program is free software; you can redistribute it and/or modify " + 
+            "it under the terms of the GNU General Public License as published by " +
+            "the Free Software Foundation; either version 2 of the License, or " +
+            "(at your option) any later version.</p>"+
+
+            "<p>This program is distributed in the hope that it will be useful, "+
+            "but WITHOUT ANY WARRANTY; without even the implied warranty of "+
+            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "+
+            "GNU General Public License for more details.</p>"+
+
+            "<p>You should have received a copy of the GNU General Public License " +
+            "along with this program; if not, write to the Free Software "+
+            "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</p>"+
+            "</html>");
         //Eingabe, Historie, Grafik, Info
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
         tabbedPane.setFont(f2);
         tabbedPane.addTab("Eingabe", p1);
         tabbedPane.addTab("Historie", p2);
         tabbedPane.addTab("Graph", gfxPane);
-        tabbedPane.addTab("Info", new JButton("Knopf"));
+        tabbedPane.addTab("Info", spia);
         frame.getContentPane().add(tabbedPane);
     }
 }

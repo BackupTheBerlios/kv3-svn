@@ -63,29 +63,36 @@ public class GfxEinstellungen extends java.lang.Object
       return this.drehschritte;
   }
 }
-    
-    public AchsenListe xAchse, yAchse;
-    public Sortierung sortierung;
-    public Drehung drehung;
+    public AchsenListe
+        xAchse=AchsenListe.Kraftstoffmenge, 
+        yAchse=AchsenListe.Kraftstoffmenge;
+    public Sortierung 
+        sortierung = Sortierung.KEINE;
+    public Drehung 
+        drehung = Drehung.D0;
     
 	public GfxEinstellungen() {
-		this.xAchse = AchsenListe.Kraftstoffmenge;
+        setzeString2xAchse("Kraftstoffmenge");
+        setzeString2yAchse("Strecke");
+        setzeString2sortierung("XUP");
+        setzeString2drehung("D0");
+		/*this.xAchse = AchsenListe.Kraftstoffmenge;
         this.yAchse = AchsenListe.Strecke;
         this.sortierung = Sortierung.XUP;
-        this.drehung = Drehung.D0;
+        this.drehung = Drehung.D0;*/
 	}
     
-    public void setzeString2Drehung(String v) {
-        for (Drehung d : Drehung.values()) if (d.toString().equals(v)) this.drehung = d;
+    public void setzeString2drehung(String v) {
+        drehung = drehung.valueOf(drehung.getDeclaringClass(), v);
     }
-    public void setzeString2Sortierung(String v) {
-        for (Sortierung s : Sortierung.values()) if (s.toString().equals(v)) this.sortierung = s;
+    public void setzeString2sortierung(String v) {
+        sortierung = sortierung.valueOf(sortierung.getDeclaringClass(), v);        
     }
     public void setzeString2xAchse(String v) {
-        for (AchsenListe a : AchsenListe.values()) if (a.toString().equals(v)) this.xAchse = a;
+        xAchse = xAchse.valueOf(xAchse.getDeclaringClass(), v);
     }
     public void setzeString2yAchse(String v) {
-        for (AchsenListe a : AchsenListe.values()) if (a.toString().equals(v)) this.yAchse = a;
+        yAchse = xAchse.valueOf(yAchse.getDeclaringClass(), v);
     }
     
 } 
