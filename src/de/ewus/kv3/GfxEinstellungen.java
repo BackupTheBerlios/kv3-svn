@@ -22,11 +22,25 @@ package de.ewus.kv3;
  * Diese Klasse stellt einen Container bereit, der alle möglichen Grafikeinstellungen beinhaltet.
  *
  * @author     Erik Wegner
- * @version    0
+ * @version    1.0
  */
 public class GfxEinstellungen extends java.lang.Object
 {
-    
+
+    public int
+	/**
+	 * Die Breite der erzeugten Grafik
+	 */
+	breite,
+	/**
+	 * Die Höhe der erzeugten Grafik
+	 */
+	hoehe;
+    /*
+     * Gibt an, ob Linien zwischen den Punkten gezeichnet werden sollen
+     */
+    public boolean zeichneLinie;
+
     public enum Sortierung {
         KEINE("Keine"), 
         XUP( "X aufsteigend"), 

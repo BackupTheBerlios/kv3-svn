@@ -22,31 +22,107 @@ package de.ewus.kv3;
  * Erzeugt grafische Auswertungen.
  * 
  * @author     Erik Wegner
- * @version    0
+ * @version    1.0
  */
-public class Grafikfabrik
+public class Grafikfabrik implements Runnable
 {
-	// instance variables - replace the example below with your own
-	private int x;
+    private Kleber kleber;
 
-	/**
-	 * Constructor for objects of class Grafikfabrik
-	 */
-	public Grafikfabrik()
-	{
-		// initialise instance variables
-		x = 0;
-	}
+    /**
+     * Einstellungen zur Grafik
+     */
+    private GfxEinstellungen ge;
 
-	/**
-	 * An example of a method - replace this comment with your own
-	 * 
-	 * @param  y   a sample parameter for a method
-	 * @return     the sum of x and y 
-	 */
-	public int sampleMethod(int y)
-	{
-		// put your code here
-		return x + y;
+    /**
+     * Der Historieneintrag wird geprüft, ob er in der Grafik 
+     * auftaucht, je nach Filterkriterium des Benutzers
+     */
+    private boolean eintragsfilter(Historieneintrag he) {
+	return true;
+    }
+
+    /**
+     * Aus dem Historieneintrag wird ein GfxPunkt erzeugt
+     *
+     * @param he   Der Historieneintrag zur Darstellung im Diagramm
+     * @return     Ein GfxPunkt zur Darstellung im Diagramm
+     */
+    private GfxPunkt punkterzeuger(Historieneintrag he) {
+	GfxPunkt p;
+	return p;
+    }
+
+    /**
+     * Testet, ob laut GfxEinstellungen die Diagrammpunkte sortiert werden sollen
+     *
+     * @return    Wahrheitswert gibt an, ob sortiert werden soll
+     */
+    private boolean sortieren() {
+	return false;
+    }
+
+    /**
+     * Die Methode erzeugt das Diagramm.
+     *
+     * Die Methode wird durch Aufruf von run() aktiviert.
+     * @see run()
+     */
+    private erzeugeBild() {
+	//Vorbereitungen: Variablen, Instanzen, Initialisierungen
+	Historieneintrag he;
+	Historie historie = kleber.holeHistorie();
+	Vector<GfxPunkt> punkte = new Vector<GfxPunkt>();
+	GfxPunkt maxPunkt = new GfxPunkt();
+	int breite = ge.breite,
+	    hoehe = ge.hoehe;
+	//Alle Punkte durchlaufen, ob sie in das Diagramm kommen
+	int anzahlHE = historie.size();
+	for (int c1 = 0; c1 < anzahlHE; c1++) {
+	    he = historie.holeEintragNr(c1);
+	    if (eintragfilter(he)) {
+		GfxPunkt p = punkterzeuger(he);
+		//Größten x- und y-Wert speichern
+		if (p.x > maxPunkt.x) maxPunkt.x = p.x;
+		if (p.y > maxPunkt.y) maxPunkt.y = p.y;
+		punkte.add(p);
+	    }
 	}
+	//Diagrammpunkte sortieren
+	//if (sortierePunkte) punkte.sort;
+	//Diagramm zeichen
+	int anzahlPunke = punkte.size();
+	GfxPunkt punkt, vorgaenger = null;
+	for(int c2 = 0; c2 < anzahlPunkte; c2++) {
+	    punkt = punkte.elementAt(c2);
+	    // Zeichne Punkt
+	    //...
+	    if (c2 > 0 && ge.zeichneLinien) {
+		//ZeichneLinie
+		//...
+	    }
+	    vorgaenger = punkt;
+	}
+	//zeichneAchsen
+	//...
+	//Informiere Kleber, das Diagramm ist fertig
+	kleber.diagrammFertig();
+    }
+    
+    /**
+     * Die Methode startet die Diagrammerzeugung.
+     *
+     * Die Methode kehrt unverzüglich zurück.
+     */
+    public void run() {
+	erzeugeBild();
+    }
+
+    /**
+     * Constructor for objects of class Grafikfabrik
+     *
+     * @param kleber Für Zugriff auf die Historie
+     */
+    public Grafikfabrik(Kleber kleber) {
+    }
+
 }

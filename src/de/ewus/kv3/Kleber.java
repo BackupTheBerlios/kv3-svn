@@ -324,6 +324,13 @@ public class Kleber {
      * @return Die Historie der Anwendung.
      */
     public Historie holeHistorie() {return this.historie;}
+
+    /**
+     * Diese Methode wird von der Grafikfabrik aufgerufen, wenn das Diagramm vollendet ist.
+     */
+    public void diagrammFertig() {
+	abstract();
+    }
     
     /**
      * Der Einsprungpunkt für die Anwendung
