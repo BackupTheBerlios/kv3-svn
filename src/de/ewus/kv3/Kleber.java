@@ -155,7 +155,7 @@ public class Kleber {
                 hinweiseKommandozeile("Parameter -" + CFGFORMAT + " hat einen ungültigen Wert (" + cfgFormat + ").");
         }
         //Schonmal abspeichern, welches Datenformat wir haben
-        properties.setProperty(CFGFORMAT, (useXMLcfg ? "XML" : "TXT"));
+        setProperty(CFGFORMAT, (useXMLcfg ? "XML" : "TXT"));
         
         //Und wie heißt die Konfigurationsdatei?
         if (cfgDatei.equals("")) cfgDatei = "kv3.cfg";
@@ -191,18 +191,17 @@ public class Kleber {
             fehler("Die Speicherung erfolgt in die Datei " + cfgDatei);
         }*/
         catch (NullPointerException e) { fehler(e.getMessage()); }
-        //Und wir merken uns unserer Konfigurationsdatei
-        properties.setProperty(CFGDATEI, cfgDatei);
+        //Und wir merken uns unsere Konfigurationsdatei
+        setProperty(CFGDATEI, cfgDatei);
     }
 
-    
     private void schreibProperties() {
         boolean useXMLcfg = true; //Standard ist XML
-        useXMLcfg = !properties.getProperty(CFGFORMAT).equalsIgnoreCase("TXT");
+        useXMLcfg = !getProperty(CFGFORMAT).equalsIgnoreCase("TXT");
         
         String cfgDatei = "", cfgFormat = "";
-        cfgDatei = properties.getProperty(CFGDATEI);
-        cfgFormat = properties.getProperty(CFGFORMAT);
+        cfgDatei = getProperty(CFGDATEI);
+        cfgFormat = getProperty(CFGFORMAT);
         File cfgFile = new File(cfgDatei);
         try {
             if (cfgFile.exists() && !cfgFile.canWrite()) fehler("Datei \"" + cfgDatei + "\" ist nicht schreibbar.");
@@ -220,8 +219,7 @@ public class Kleber {
         catch (NullPointerException e) { fehler(e.getMessage()); }
     }
 
-    private void fehler(String msg)
-    {
+    private void fehler(String msg) {
         System.err.println(msg);
     }
     
@@ -247,6 +245,13 @@ public class Kleber {
         return this.gfxeinstellungen;
     }
 
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+    
+    public void setProperty(String key, String value) {
+        properties.setProperty(key, value);
+    }
 
     /**
      * Der Einsprungpunkt für die Anwendung
