@@ -51,9 +51,10 @@
 			<fileset dir="${classes}">
 				<include name="**"/>
 			</fileset>
-			<fileset dir="${basedir}">
-				<include name="ressourcen/img/kanister.png"/>
-			</fileset>			
+			<fileset dir="${basedir}/ressourcen/img/">
+				<include name="kanister.png"/>
+                                <include name="kanister.gif"/>
+			</fileset>
 			<!--
 			<fileset dir="${basedir}">
 			<include name="handbuch/handbuch.pdf" />
@@ -74,9 +75,10 @@
 			<fileset dir="${classes}">
 				<include name="**"/>
 			</fileset>
-			<fileset dir="${basedir}">
-				<include name="ressourcen/img/kanister.png"/>				
-			</fileset>			
+			<fileset dir="${basedir}/ressourcen/img/">
+				<include name="kanister.png"/>
+                                <include name="kanister.gif"/>
+			</fileset>
 		</jar>
 	</target>
 	<target name="srcjar" description="Erstellt eine JAR-Datei mit den Quellen der Anwendung">

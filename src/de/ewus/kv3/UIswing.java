@@ -31,7 +31,7 @@ import java.net.URL;
  * @author     Erik Wegner
  * @version    1.0
  */
-public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, ListSelectionListener, ComponentListener, ItemListener {
+public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, MouseListener, ComponentListener, ItemListener {
     private JFrame frame;  //Das Fenster
     private JLabel lStrecke, lKraftstoff, //Labels mit wechselnder Hintergrundfarbe
         lErgebnis;
@@ -62,6 +62,26 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         if (e.getSource().equals(xliste)) lies_UI_Einstellungen_xListe();
         if (e.getSource().equals(yliste)) lies_UI_Einstellungen_yListe();
         if (e.getSource().equals(sortliste)) lies_UI_Einstellungen_sortierliste();
+    }
+
+    
+    public void mousePressed(MouseEvent e) {       
+    }
+
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    public void mouseExited(MouseEvent e) {
+    }
+
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource().equals(histTable)) {
+            historieEintragBearbeiten(histTable.getSelectedRow());
+            this.zeige_UI_Gesamtdurchschnitt();
+        }
     }
     
     private void lies_UI_Einstellungen_sortierliste() {
@@ -271,12 +291,15 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
          *  create and show the GUI
          */
         frame = new JFrame("Kraftstoffverbrauch 3.0");
-        java.net.URL imageURL = UIswing.class.getResource("ressourcen/img/kanister.png");
-        if (imageURL != null) {
-            // FIXME: Application Icon wird nicht geladen
+        
+        java.net.URL imageURL = UIswing.class.getResource("/kanister.gif");
+        //System.out.println("imageURL=" + imageURL);
+        if (imageURL != null) {            
             ImageIcon icon = new ImageIcon(imageURL);
             frame.setIconImage(icon.getImage());
-        }
+        } else System.out.println("" + imageURL + " funktioniert nicht.");
+        
+        //frame.setIconImage( Toolkit.getDefaultToolkit().getImage("/kanister.png") );
         addUIElements(frame);        
         frame.addWindowListener(this);
         setzeAktivesFeld(felder.Strecke);
@@ -453,7 +476,8 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         //*****************************************
         JPanel p2 = new JPanel(new BorderLayout());
         histTable = new JTable(kleber.holeHistorie());
-        histTable.getSelectionModel().addListSelectionListener( this );
+        //histTable.getSelectionModel().addListSelectionListener( this );
+        histTable.addMouseListener(this);
         //JList liste = new JList();
         JScrollPane lsp = new JScrollPane(histTable);
         p2.add(lsp, BorderLayout.CENTER);
