@@ -1,4 +1,6 @@
 package de.ewus.kv3;
+import java.util.Properties;
+import ml.options.*;
 
 /**
  * Die Klasse Kleber verbindet alle Hilfsklassen zur lauffähigen Anwendung.
@@ -9,7 +11,8 @@ package de.ewus.kv3;
  */
 public class Kleber {
     private UITypen targetui;
-    private Konfiguration konfig;
+    //private Konfiguration konfig;
+    private Properties properties;
     private UIManager ui;
     private Historie historie;
     private GfxEinstellungen gfxeinstellungen;
@@ -23,7 +26,7 @@ public class Kleber {
     public Kleber(String[] args) {
         init(args);
         createUI();
-        ui.startUI();        
+        ui.startUI();
     }
 
 
@@ -49,7 +52,9 @@ public class Kleber {
      *  Anwendung beendet werden kann.
      */
     public void quitApp() {
-        System.exit(0);
+        // QUESTION: System.exit oder ui.dispose();
+        ui.dispose();
+        //System.exit(0);
     }
 
 
@@ -66,26 +71,49 @@ public class Kleber {
     }
 
 
+    private void hinweiseKommandozeile(String msg) {
+        System.out.println("Folgende Kommandozeilenparameter werden verarbeitet:");
+        System.out.println(" -ui=[swing|console|ncurses]");
+        if (!msg.equals("")) {
+            System.out.println("\n" + msg);
+        }
+    }
+    
     /**
      *  Hier werden Konfigurationsoptionen ausgewertet und gesetzt.
      *
      * @param  args  Die Kommandozeilenparameter
      */
     private void init(String[] args) {
-        historie = new Historie();
-        konfig = new Konfiguration("kv3konfig.txt", true);
-        //Zuerst alle Optionen auf Standard setzen
-        setzeUI(UITypen.swing);
-        gfxeinstellungen = new GfxEinstellungen();        
-        //Suche nach Konfigurationsoptionen in der konfig-Datei
-
-        //Suche nach Konfigurationsoptionen auf der Kommandozeile
-        String[] argv;
-        for (int c1 = 0; c1 < args.length; c1++) {
-            argv = args[c1].split("=", 2);
-            if (argv[0].equals("--ui") && argv.length == 2) {
-                setzeUI(UITypen.console);
-            }
+        ml.options.Options opt = new Options(args, 0, 1);
+        opt.getSet().addOption("ui", 
+            ml.options.Options.Separator.EQUALS, 
+            ml.options.Options.Multiplicity.ZERO_OR_ONE);
+        if (args.length > 0 && !opt.check(false,false)) {
+            // Print usage hints
+            hinweiseKommandozeile(opt.getCheckErrors());
+            System.exit(1);
+        } else {        
+            historie = new Historie();
+            //konfig = new Konfiguration("kv3konfig.txt", true);
+            // TODO: properties aus Datei laden
+            properties = new Properties();
+            
+            
+            //Zuerst alle Optionen auf Standard setzen
+            setzeUI("swing");
+            gfxeinstellungen = new GfxEinstellungen();
+            
+            
+            //Suche nach Konfigurationsoptionen in der konfig-Datei
+            // TODO: Suche nach Konfigurationsoptionen in der konfig-Datei
+            //if !properties.getValue("defaultui").equals("") setzeUI;
+            
+            
+            //Setze Optionen aus der Kommandozeile
+            // TODO: Setze Optionen aus der Kommandozeile
+            setzeUI(opt.getSet().getOption("ui").getResultValue(0));
+    
         }
     }
 
@@ -96,8 +124,11 @@ public class Kleber {
      *
      * @param  targetui  Art der zu benutzenden Oberfläche
      */
-    private void setzeUI(UITypen targetui) {
-        this.targetui = UITypen.swing;
+    private void setzeUI(String targetui) {
+        if (targetui.equals("swing")) this.targetui = UITypen.swing;
+        else if (targetui.equals("console")) this.targetui = UITypen.console;
+            else if (targetui.equals("ncurses")) this.targetui = UITypen.ncurses;
+                else hinweiseKommandozeile("Parameter -ui hat einen ungültigen Wert (" + targetui + ").");        
     }
 
 

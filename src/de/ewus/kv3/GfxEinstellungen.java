@@ -64,7 +64,7 @@ public class GfxEinstellungen extends java.lang.Object
   }
 }
     public AchsenListe
-        xAchse=AchsenListe.Kraftstoffmenge, 
+        xAchse=AchsenListe.Kraftstoffmenge,
         yAchse=AchsenListe.Kraftstoffmenge;
     public Sortierung 
         sortierung = Sortierung.KEINE;

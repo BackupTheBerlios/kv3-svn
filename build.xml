@@ -11,7 +11,7 @@
 	<property name="klassenbasis" value="de.ewus.kv3" />
 	<property name="SRCJAR" value="kv3_src.jar" />
 	<property name="BINJAR" value="kv3.jar" />
-	<target name="classes" description="Erstelle die Java-Klassen zur Ausführun">
+	<target name="classes" description="Erstelle die Java-Klassen zur Ausführung">
 		<mkdir dir="${classes}"/>
 		<javac destdir="${classes}" srcdir="${src}" />
 	</target>

@@ -17,7 +17,7 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
     private Historieneintrag e;
     private UIManager.HEDlgErgebnis ergebnis;
 
-    public UIManager.HEDlgErgebnis ergebnis() {
+    public UIManager.HEDlgErgebnis holeErgebnis() {
         return ergebnis;
     }
     
@@ -90,7 +90,7 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         c.gridx = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
-        Vector v = new Vector<String>();
+        Vector<String> v = new Vector<String>();
         for (int c1 = 0 ; c1 < e.maxFahrzeug ; c1++) v.add(Integer.toString(c1));
         cbFahrzeug = new JComboBox(v.toArray());
         p1.add(cbFahrzeug, c);
@@ -105,7 +105,7 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
         v.clear();
-        // TODO: Liste muss durch den enum-Typ gefüllt werden        
+        // TODO: Liste muss durch den enum- Typ gefüllt werden        
         v.add("Unbekannt");
         v.add("Stadt");
         v.add("Land");

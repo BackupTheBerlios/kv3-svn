@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
  */
 public abstract class UIManager {
     //Ergebnis des Dialogs zur Bearbeitung eines Historieneintrags
-    public enum HEDlgErgebnis{OK,  Abbrechen, Loeschen};
+    public enum HEDlgErgebnis{ OK,  Abbrechen, Loeschen };
     protected float
         strecke = 0.0f,
         kraftstoff = 0.0f,
