@@ -44,6 +44,8 @@ public class Historie extends javax.swing.table.AbstractTableModel {
     
     private Zahlenformatierer zf = new Zahlenformatierer();
     
+    private boolean geaendert = false; /** gibt an, ob die Daten seit dem Ladevorgang geändert wurden */
+    
     /**
      * Erzeugt die Historien-Klasse und liest Voreinstellungen aus den Properties.
      * @param kleber Die Kleber-Klasse zur Verbindung aller Hilfsklassen.
@@ -180,7 +182,8 @@ public class Historie extends javax.swing.table.AbstractTableModel {
     public void fuegeHinzu(Historieneintrag e) {
         // DONE: fuegeHinzu(Historieneintrag)
         historie.add(e);
-	this.neueWerte();
+        geaendert = true;
+        this.neueWerte();
         //System.out.println(e);
     }
     
@@ -196,6 +199,7 @@ public class Historie extends javax.swing.table.AbstractTableModel {
             in.close();            
         } 
         catch (IOException e) { System.err.println(e.getMessage()); }
+        geaendert = false;
     }
     
     /**
@@ -203,14 +207,16 @@ public class Historie extends javax.swing.table.AbstractTableModel {
      * @param datei Der Dateiname der Ausgabedatei
      */
     public void schreibHistorie(String datei) {
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(datei));
-            for (Historieneintrag e : historie) {
-                out.write(e.toString());
-                out.newLine();
-            }
-            out.close();
-        } catch (IOException e) { System.err.println(e.getMessage()); }
+        if (geaendert) {
+            try {
+                BufferedWriter out = new BufferedWriter(new FileWriter(datei));
+                for (Historieneintrag e : historie) {
+                    out.write(e.toString());
+                    out.newLine();
+                }
+                out.close();
+            } catch (IOException e) { System.err.println(e.getMessage()); }
+        } else System.out.println("Historie wurde nicht gespeichert, weil keine Änderung vorliegt.");
     }
     
     /**
@@ -235,6 +241,7 @@ public class Historie extends javax.swing.table.AbstractTableModel {
      */
     public void setzeEintragNr(int nummer, Historieneintrag e) {
         historie.setElementAt(e, nummer);
+        geaendert = true;
     }
     
     /**
@@ -243,6 +250,7 @@ public class Historie extends javax.swing.table.AbstractTableModel {
      */
     public void loescheEintrag(int nummer) {
         historie.removeElementAt(nummer);
+        geaendert = true;
         neueWerte();
     }
     
