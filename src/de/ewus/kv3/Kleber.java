@@ -23,7 +23,8 @@ public class Kleber {
     private final String
         CFGDATEI = "cfgDatei",
         CFGFORMAT = "cfgFormat",
-        DEFAULTUI = "defaultUI";
+        DEFAULTUI = "defaultUI",
+        HISTORIEDATEI = "HistorieDatei";
 
     /**
      * Constructor for objects of class Kleber
@@ -63,6 +64,7 @@ public class Kleber {
     public void quitApp() {
         // QUESTION: System.exit oder ui.dispose();
         ui.dispose();
+        historie.schreibHistorie(getProperty(HISTORIEDATEI));
         schreibProperties();
         //System.exit(0);
     }
@@ -125,6 +127,11 @@ public class Kleber {
             
             //Zuerst alle Optionen auf Standard setzen
             setzeUI("swing");
+            String histDatei = getProperty(HISTORIEDATEI);
+            if (histDatei == null) histDatei = new String("");
+            if (histDatei.equals("")) histDatei = "historie.kv3";
+            setProperty(HISTORIEDATEI, histDatei);
+            historie.liesHistorie(histDatei);
             gfxeinstellungen = new GfxEinstellungen();
             
             

@@ -174,8 +174,8 @@ public class UIswingHEDlg extends javax.swing.JDialog implements ActionListener
         return r;
     }
     
-    
     private boolean validiereEingaben() {
+        // TODO: Fehlermeldung erscheint grafisch
         boolean r = false;
         r = kannUmwandeln(tfStrecke.getText());
         if (!r) {System.err.println("Umwandeln mit Fehler: Strecke");}

@@ -453,7 +453,7 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
     public HEDlgErgebnis bearbeiteHistorieneintrag(Historieneintrag e) {
         UIswingHEDlg dlg = new UIswingHEDlg(frame, true, e);
         dlg.setVisible(true);
-        System.out.println("Dialog fertig, Ergebnis:" + dlg.holeErgebnis());
+        //System.out.println("Dialog fertig, Ergebnis:" + dlg.holeErgebnis());
         return dlg.holeErgebnis();
     }
 }

@@ -6,8 +6,8 @@ import java.io.*;
 /**
  * Write a description of class Historie here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Erik Wegner
+ * @version 3.0
  */
 public class Historie
 {
@@ -26,22 +26,29 @@ public class Historie
 	 * @param  e   Ein Historieneintrag	 
 	 */
 	public void fuegeHinzu(Historieneintrag e) {
-        // TODO: fuegeHinzu(Historieneintrag)
+        // DONE: fuegeHinzu(Historieneintrag)
         historie.add(e);
-        System.out.println(e);
+        //System.out.println(e);
     }
     
     public void liesHistorie(String datei) {
         try {
-            //Öffne Datei
             BufferedReader in = new BufferedReader(new FileReader(datei));
             String zeile;
             while ((zeile = in.readLine()) != null) fuegeHinzu(new Historieneintrag(zeile));            
-            in.close();
-            //lies Zeile
-            //teile Zeile in Einheiten
+            in.close();            
         } 
         catch (IOException e) { System.err.println(e.getMessage()); }
-        //catch (PatternSyntaxException e) { System.err.println(e.getMessage()); }
+    }
+    
+    public void schreibHistorie(String datei) {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(datei));
+            for (Historieneintrag e : historie) {
+                out.write(e.toString());
+                out.newLine();
+            }
+            out.close();
+        } catch (IOException e) { System.err.println(e.getMessage()); }
     }
 }
