@@ -18,6 +18,7 @@
 \usepackage{longtable}
 \usepackage{color}
 \usepackage{picins}
+\usepackage[english,ngerman]{babel}
 \usepackage{fancyvrb} %für verbatiminput
 \usepackage[draft=false, pdftex, a4paper, bookmarks=true, bookmarksopen=true, bookmarksnumbered=true, pdfauthor={Erik Wegner}, pdftitle={Handbuch zur Anwendung Kraftstoffverbrauch 3}, colorlinks, linkcolor=blue, urlcolor=blue, pdfstartview=FitH, pdfpagemode=UseOutlines]{hyperref}
 
@@ -57,6 +58,7 @@
 \newcommand{\cmd}[1]{\texttt{#1}}
 
 \newcommand{\appKV}{Kraftstoffverbrauch~3}
+\newcommand{\appKVLink}{\href{http://kv3.berlios.de}{\appKV}}
 
 \definecolor{gruen}{rgb}{0.0,1.0,0.0}
 \definecolor{gelb}{rgb}{1.0,1.0,0.0}
@@ -98,8 +100,11 @@
 %\includegraphics[scale=0.333]{logo_a} \\ 
 Handbuch \\ 
 der Anwendung\\ 
-\appKV \\
-\includegraphics[draft=false]{gfx/kanister}}
+\appKVLink \\
+\includegraphics[draft=false]{gfx/kanister} \\
+errreichbar auf \\
+\href{http://kv3.berlios.de}{\includegraphics[scale=0.5]{gfx/berliOS_logo.png}}
+}
 \author{Erik Wegner}
 %Datum wird automatisch eingefügt
 \begin{document}
@@ -118,7 +123,7 @@ der Anwendung\\
 \index{Zusammenfassung}
 \end{center}
 
-Dieses Handbuch beschreibt die Anwendung \appKV.
+Dieses Handbuch beschreibt die Anwendung \appKVLink.
 
 \end{abstract}
 \ABSCHNITTSTRENNER
@@ -132,7 +137,7 @@ Dieses Handbuch beschreibt die Anwendung \appKV.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \part{Allgemeines}
 
-Die Anwendung \appKV{} dient zur Berechnung des
+Die Anwendung \appKVLink{} dient zur Berechnung des
 Kraftstoffverbrauchs. Die eingegebenen Werte können in einer Historie
 gespeichert und anschließend in einem Diagramm dargestellt und werden.
 
@@ -228,6 +233,8 @@ Diese Funktion ist noch nicht implementiert.
 \ABSCHNITTSTRENNER
 \appendix
 \part{Anhang}
+\include{gpl}
+
 \hypertarget{HTCLIParams}
 {\section{\textindex{Kommandozeilenparameter}\label{CLIParams}\index{Parameter!Kommandozeile}}}
 Die Parameter können durch Aufruf mit dem Parameter \cmd{-{}-help} angezeigt

@@ -8,6 +8,7 @@
 	<property name="src" value="src" />
 	<property name="classes" value="classes" />
 	<property name="doc" value="doc" />
+	<property name="handbuch" value="handbuch" />
 	<property name="klassenbasis" value="de.ewus.kv3" />
 	<property name="SRCJAR" value="kv3_src.jar" />
 	<property name="BINJAR" value="kv3.jar" />
@@ -19,11 +20,20 @@
 		<javadoc destdir="${doc}" packagenames="${klassenbasis}" sourcepath="${src}" />
 	</target>
 	<target name="pdf" description="Erstellt die Klassendokumentation mittels javadoc">
-		<exec executable="pdflatex" dir="${doc}">
-			<arg line="../src/latex/Programmbeschreibung" />
+		<exec executable="pdflatex" dir="${handbuch}">
+			<arg line="handbuch" />
+		</exec>
+		<exec executable="makeindex" dir="${handbuch}">
+			<arg line="handbuch" />
+		</exec>
+		<exec executable="pdflatex" dir="${handbuch}">
+			<arg line="handbuch" />
+		</exec>
+		<exec executable="pdflatex" dir="${handbuch}">
+			<arg line="handbuch" />
 		</exec>
 	</target>	
-	<target name="all" depends="jar,doc,srcjar" description="Erstellt alles">
+	<target name="all" depends="jar,doc,srcjar,pdf" description="Erstellt alles">
 	</target>
 	<target name="clean" description="Entfernt die Java-Klassen und die erstellte Dokumentation">
 		<delete dir="${classes}" />
@@ -31,7 +41,7 @@
 		<delete file="${BINJAR}" />
 		<delete file="${SRCJAR}" />
 	</target>
-        <target name="dailyrelease" description="Erstellt eine tagesaktuelle JAR-Datei" depends="classes">
+        <target name="dailyrelease" description="Erstellt eine tagesaktuelle JAR-Datei" depends="classes,pdf">
             <tstamp />
             <jar destfile="${DSTAMP}-${BINJAR}" >
 			<manifest>
@@ -42,8 +52,17 @@
 				<include name="**"/>
 			</fileset>
 			<fileset dir="${basedir}">
-				<include name="ressourcen/img/kanister.png"/>				
+				<include name="ressourcen/img/kanister.png"/>
 			</fileset>			
+			<!--
+			<fileset dir="${basedir}">
+			<include name="handbuch/handbuch.pdf" />
+			<include name="handbuch/handbuch.tex" />
+			<include name="handbuch/gpl.tex" />
+			<include name="handbuch/gfx/**.png" />
+			<include name="handbuch/gfx/**.pdf" />
+			</fileset>
+			-->
             </jar>
         </target>
 	<target name="jar" description="Erstellt eine ausführbare JAR-Datei" depends="classes">
@@ -70,6 +89,12 @@
 				<include name="ressourcen/img/kanister.png"/>
 				<include name="build.xml"/>
 			</fileset>						
+			<fileset dir="${basedir}">
+			<include name="handbuch/handbuch.tex" />
+			<include name="handbuch/gpl.tex" />
+			<include name="handbuch/gfx/**.png" />
+			<include name="handbuch/gfx/**.pdf" />			
+			</fileset>
 		</jar>
 	</target>
 	<target name="run" depends="jar" description="Führt die Anwendung aus">

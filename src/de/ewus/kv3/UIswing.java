@@ -31,12 +31,17 @@ import java.net.URL;
  * @author     Erik Wegner
  * @version    1.0
  */
-public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, ListSelectionListener, ComponentListener {
+public class UIswing extends UIManager implements WindowListener, Runnable, ActionListener, KeyListener, ListSelectionListener, ComponentListener, ItemListener {
     private JFrame frame;  //Das Fenster
     private JLabel lStrecke, lKraftstoff, //Labels mit wechselnder Hintergrundfarbe
         lErgebnis;
     private JTextField tfStrecke, tfKraftstoff; //Textfelder für Eingabe
     private JTable histTable; //Tabelle der Historie
+    private JComboBox 
+        xliste, //Auswahl Datenquelle X-Achse
+        yliste, //Auswahl Datenquelle Y-Achse
+        cb_modus, //Auswahl Punkt- oder Linienzeichenmodus
+        sortliste; //Auswahl Sortierung der Datenpunkte
     private UIswingDiagramm diagrammPanel; // Panel zur Darstellung des Diagramms
     
     private enum felder {Kraftstoff, Strecke};
@@ -50,7 +55,36 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
      */
     public UIswing() {         
     }
-
+        
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getSource().equals(cb_modus)) lies_UI_Einstellung_Modus();
+        if (e.getSource().equals(xliste)) lies_UI_Einstellungen_xListe();
+        if (e.getSource().equals(yliste)) lies_UI_Einstellungen_yListe();
+        if (e.getSource().equals(sortliste)) lies_UI_Einstellungen_sortierliste();
+    }
+    
+    private void lies_UI_Einstellungen_sortierliste() {
+        switch (sortliste.getSelectedIndex()) {
+            case 0 : ge.sortierung = GfxEinstellungen.Sortierung.KEINE; break;
+            case 1 : ge.sortierung = GfxEinstellungen.Sortierung.XUP; break;
+            case 2 : ge.sortierung = GfxEinstellungen.Sortierung.YUP; break;
+            case 3 : ge.sortierung = GfxEinstellungen.Sortierung.XYUP; break;
+            case 4 : ge.sortierung = GfxEinstellungen.Sortierung.YXUP; break;
+        }
+    }
+    
+    private void lies_UI_Einstellungen_xListe() {
+        ge.xAchse = xliste.getSelectedIndex();
+    }
+    
+    private void lies_UI_Einstellungen_yListe() {
+        ge.yAchse = yliste.getSelectedIndex();
+    }
+    
+    private void lies_UI_Einstellung_Modus() {
+        ge.zeichneLinie = cb_modus.getSelectedIndex() != 0;
+        ge.zeichnePunkte = cb_modus.getSelectedIndex() != 1;
+    }
     
     public void componentHidden(ComponentEvent e) {
         //Nichts zu tun
@@ -411,14 +445,15 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         gfxPane.addTab("Grafik", diagrammPanel);
         diagrammPanel.addComponentListener(this);
         //Seite Grafik, Achsen
-        JComboBox xliste = new JComboBox(); JComboBox yliste = new JComboBox();
+        xliste = new JComboBox(); 
+        yliste = new JComboBox();
         GfxEinstellungen gfxe = this.kleber.holeGfxEinstellungen();
-	for (int c1 = 0; c1<Historieneintrag.anzahlFelder; c1++) {
-	    xliste.addItem(Historieneintrag.feldNamen[c1]);
-	    yliste.addItem(Historieneintrag.feldNamen[c1]);
-	};
-	xliste.setSelectedIndex(gfxe.xAchse);
-	yliste.setSelectedIndex(gfxe.yAchse);
+        for (int c1 = 0; c1<Historieneintrag.anzahlFelder; c1++) {
+            xliste.addItem(Historieneintrag.feldNamen[c1]);
+            yliste.addItem(Historieneintrag.feldNamen[c1]);
+        };
+        xliste.setSelectedIndex(gfxe.xAchse); xliste.addItemListener(this);
+        yliste.setSelectedIndex(gfxe.yAchse); yliste.addItemListener(this);
 	/*
         for (GfxEinstellungen.AchsenListe a : GfxEinstellungen.AchsenListe.values()) {
             xliste.addItem(a.bezeichnung());
@@ -427,11 +462,12 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
             if (a.equals(gfxe.yAchse)) yliste.setSelectedIndex(yliste.getItemCount()-1);
         }
 	*/
-        JComboBox sortliste = new JComboBox();
+        sortliste = new JComboBox();
         for (GfxEinstellungen.Sortierung s :GfxEinstellungen.Sortierung.values()) {
             sortliste.addItem(s.bezeichnung());
             if (s.equals(gfxe.sortierung)) sortliste.setSelectedIndex(sortliste.getItemCount()-1);
         }
+        sortliste.addItemListener(this);
         JComboBox drehliste = new JComboBox();
         for (GfxEinstellungen.Drehung d : GfxEinstellungen.Drehung.values()) {
             drehliste.addItem(d.bezeichnung());
@@ -465,7 +501,13 @@ public class UIswing extends UIManager implements WindowListener, Runnable, Acti
         p32.add(new JLabel("Farbe Werte"), cl); cl.gridy++;
         p32.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;
         p32.add(new JLabel("Modus"), cl); cl.gridy++;
-        p32.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;
+        cb_modus = new JComboBox();
+        cb_modus.addItem("Punkte");
+        cb_modus.addItem("Linien");
+        cb_modus.addItem("Punkte und Linien");
+        cb_modus.addItemListener(this);
+        p32.add(cb_modus, cr);
+        cr.gridy++;
         p32.add(new JLabel("Stärke"), cl); cl.gridy++;
         p32.add(new JLabel("--- FIXME ---"), cr); cr.gridy++;
         p32.add(new JLabel("Form"), cl); cl.gridy++;

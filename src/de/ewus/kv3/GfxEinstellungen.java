@@ -28,19 +28,19 @@ public class GfxEinstellungen extends java.lang.Object
 {
 
     public int
-	/**
-	 * Die Breite der erzeugten Grafik
-	 */
-	breite = 640,
-	/**
-	 * Die Höhe der erzeugten Grafik
-	 */
-	hoehe = 480;
-
-    /**
-     * Gibt an, ob Linien zwischen den Punkten gezeichnet werden sollen
-     */
-    public boolean zeichneLinie;
+        /** Die Breite der erzeugten Grafik */
+        breite = 640,
+        /** Die Höhe der erzeugten Grafik */
+        hoehe = 480,
+        /** Rahmenbreite links und rechts */
+        rahmenx = 10,
+        /** Rahmenbreite oben und unten */
+        rahmeny = 10;
+        
+    /** Gibt an, ob Linien zwischen den Punkten gezeichnet werden sollen */
+    public boolean zeichneLinie = false;
+    /** Gibt an, ob Punkte gezeichnet werden sollen */
+    public boolean zeichnePunkte = true;
     
     public enum Sortierung {
         KEINE("Keine"), 
